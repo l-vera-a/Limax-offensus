@@ -363,6 +363,9 @@ p {
   width: 140px;
   height: 140px;
   object-fit: cover;
+  /* Портреты — 3:4, лицо/макушка выше центра кадра; центр по умолчанию
+     обрезает верх головы. Сдвигаем окно кадрирования вверх. */
+  object-position: center 15%;
   border-radius: 50%;
   margin: 0 auto 0.75rem;
   box-shadow: var(--shadow-soft);
