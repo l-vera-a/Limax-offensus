@@ -7,8 +7,9 @@
   // ---------------------------------------------------------------------
   var EXTRA_UI = {
     ru: {
-      resetProgress: "Сбросить прогресс",
-      resetConfirm: "Начать формально с нуля? Текущий прогресс и статистика партий будут стёрты.",
+      continueButtonDay: "Продолжить экспедицию (День {n} из {total})",
+      restartLink: "Начать заново",
+      restartConfirm: "Текущий прогресс партии будет стёрт. Начать заново?",
       playedCount: "Сыграно партий: ",
       bestEnding: ". Лучшая концовка: ",
       journalBack: "Назад",
@@ -18,11 +19,14 @@
       workedTag: "сработало",
       failedDayLabel: "День {n} — провал экспедиции",
       dayLabel: "День {n}",
-      downloadCardFallback: "Скачать не удалось — попробуйте другой браузер."
+      downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
+      teamPrevLabel: "Предыдущий участник",
+      teamNextLabel: "Следующий участник"
     },
     uk: {
-      resetProgress: "Скинути прогрес",
-      resetConfirm: "Почати формально з нуля? Поточний прогрес і статистика партій будуть стерті.",
+      continueButtonDay: "Продовжити експедицію (День {n} з {total})",
+      restartLink: "Почати заново",
+      restartConfirm: "Поточний прогрес партії буде стерто. Почати заново?",
       playedCount: "Зіграно партій: ",
       bestEnding: ". Найкраща кінцівка: ",
       journalBack: "Назад",
@@ -32,7 +36,9 @@
       workedTag: "спрацювало",
       failedDayLabel: "День {n} — провал експедиції",
       dayLabel: "День {n}",
-      downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер."
+      downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
+      teamPrevLabel: "Попередній учасник",
+      teamNextLabel: "Наступний учасник"
     }
   };
 
@@ -59,7 +65,8 @@
     history: [],
     failed: false,
     endingId: null,
-    cardFormat: "post"
+    cardFormat: "post",
+    teamIndex: 0
   };
 
   var els = {};
@@ -85,7 +92,7 @@
       "screen-title", "latin-title", "lang-switch", "title-reveal", "subtitle-text",
       "played-count-line", "start-button", "reset-button",
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
-      "screen-team", "team-grid", "go-button",
+      "screen-team", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
       "screen-day", "stat-bd-value", "stat-prod-value", "day-counter", "day-scene",
       "day-title", "day-principle", "day-body", "day-situation", "day-options",
       "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note", "next-button",
@@ -194,9 +201,8 @@
 
     els.resetButton.addEventListener("click", function () {
       playClick();
-      if (window.confirm(tx("resetConfirm"))) {
+      if (window.confirm(tx("restartConfirm"))) {
         clearProgress();
-        localStorage.removeItem(STORAGE_HISTORY);
         renderTitleScreen();
       }
     });
@@ -215,8 +221,16 @@
   function revealTitleAfterLang() {
     els.titleReveal.hidden = false;
     els.subtitleText.textContent = t(game.ui.subtitle);
-    els.startButton.textContent = t(game.ui.startButton);
-    els.resetButton.textContent = tx("resetProgress");
+
+    var progress = loadJSON(STORAGE_PROGRESS);
+    if (progress) {
+      els.startButton.textContent = format(tx("continueButtonDay"), { n: progress.dayIndex + 1, total: game.days.length });
+      els.resetButton.textContent = tx("restartLink");
+      els.resetButton.hidden = false;
+    } else {
+      els.startButton.textContent = t(game.ui.startButton);
+      els.resetButton.hidden = true;
+    }
 
     var matchHistory = loadJSON(STORAGE_HISTORY) || [];
     if (matchHistory.length) {
@@ -263,7 +277,9 @@
   // ---------------------------------------------------------------------
 
   function renderTeamScreen() {
-    els.teamGrid.innerHTML = "";
+    state.teamIndex = 0;
+    els.teamTrack.innerHTML = "";
+    els.teamDots.innerHTML = "";
     game.characters.forEach(function (ch) {
       var card = document.createElement("div");
       card.className = "team-card";
@@ -275,9 +291,63 @@
       card.querySelector(".team-name").textContent = t(ch.name);
       card.querySelector(".team-role").textContent = t(ch.role);
       card.querySelector(".team-bio").textContent = t(ch.bio);
-      els.teamGrid.appendChild(card);
+      els.teamTrack.appendChild(card);
+
+      var dot = document.createElement("span");
+      dot.className = "team-dot";
+      els.teamDots.appendChild(dot);
     });
+    els.teamPrev.setAttribute("aria-label", tx("teamPrevLabel"));
+    els.teamNext.setAttribute("aria-label", tx("teamNextLabel"));
     els.goButton.textContent = t(game.ui.goButton);
+    updateTeamCarousel();
+  }
+
+  function updateTeamCarousel() {
+    els.teamTrack.style.transform = "translateX(-" + (state.teamIndex * 100) + "%)";
+    els.teamDots.querySelectorAll(".team-dot").forEach(function (dot, i) {
+      dot.classList.toggle("is-active", i === state.teamIndex);
+    });
+    els.teamPrev.disabled = state.teamIndex === 0;
+    els.teamNext.disabled = state.teamIndex === game.characters.length - 1;
+  }
+
+  function goToTeamSlide(index) {
+    state.teamIndex = Math.max(0, Math.min(game.characters.length - 1, index));
+    updateTeamCarousel();
+  }
+
+  function bindTeamCarouselEvents() {
+    els.teamPrev.addEventListener("click", function () {
+      playClick();
+      goToTeamSlide(state.teamIndex - 1);
+    });
+    els.teamNext.addEventListener("click", function () {
+      playClick();
+      goToTeamSlide(state.teamIndex + 1);
+    });
+
+    var startX = null;
+    var startY = null;
+    var dragging = false;
+
+    els.teamViewport.addEventListener("pointerdown", function (e) {
+      startX = e.clientX;
+      startY = e.clientY;
+      dragging = true;
+    });
+    els.teamViewport.addEventListener("pointerup", function (e) {
+      if (!dragging) return;
+      dragging = false;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        goToTeamSlide(state.teamIndex + (dx < 0 ? 1 : -1));
+      }
+    });
+    els.teamViewport.addEventListener("pointercancel", function () {
+      dragging = false;
+    });
   }
 
   // ---------------------------------------------------------------------
@@ -668,6 +738,8 @@
       showScreen("team");
       renderTeamScreen();
     });
+
+    bindTeamCarouselEvents();
 
     els.goButton.addEventListener("click", function () {
       playClick();

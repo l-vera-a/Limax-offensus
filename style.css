@@ -158,7 +158,17 @@ p {
    Кнопки
    ========================================================================== */
 
-.btn {
+.btn[hidden] {
+  display: none;
+}
+
+/*
+ * :not([hidden]) вместо голого .btn — иначе этот display: inline-flex
+ * (тот же класс специфичности, что у [hidden]) выигрывает по origin
+ * у пользовательского [hidden] { display: none }, и hidden-атрибут на
+ * кнопке молча перестаёт работать. См. аналогичный фикс для .screen.
+ */
+.btn:not([hidden]) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -348,11 +358,74 @@ p {
    3. Команда
    ========================================================================== */
 
-#team-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+.team-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.team-viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  /* Разрешаем вертикальный скролл страницы, горизонтальный жест ловит JS */
+  touch-action: pan-y;
+}
+
+#team-track {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+#team-track > .team-card {
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.carousel-arrow {
+  flex: 0 0 auto;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background: var(--color-paper);
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.3;
+}
+
+.carousel-arrow:not(:disabled):active {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}
+
+.team-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.team-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background: transparent;
+}
+
+.team-dot.is-active {
+  background: var(--color-accent);
 }
 
 .team-card {
@@ -605,8 +678,8 @@ p {
     padding: 2.5rem 2rem 3rem;
   }
 
-  #team-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .carousel-arrow {
+    display: flex;
   }
 
   #day-options {
@@ -634,10 +707,6 @@ p {
 @media (min-width: 960px) {
   .screen-inner {
     max-width: 860px;
-  }
-
-  #team-grid {
-    grid-template-columns: repeat(3, 1fr);
   }
 
   #latin-title {
