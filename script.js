@@ -73,7 +73,6 @@
     history: [],
     failed: false,
     endingId: null,
-    cardFormat: "post",
     teamIndex: 0
   };
 
@@ -106,7 +105,7 @@
       "day-body", "day-situation", "day-options",
       "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
-      "final-bd-value", "final-prod-value", "format-post", "format-story",
+      "final-bd-value", "final-prod-value",
       "download-card-button", "view-journal-button", "play-again-button", "card-canvas",
       "screen-journal", "journal-heading", "journal-list", "journal-back-button",
       "audio-ambient", "audio-click", "audio-stat-up", "audio-stat-down", "audio-fail"
@@ -585,7 +584,7 @@
 
   function downloadResultCard() {
     var ending = findEnding(state.endingId);
-    var size = state.cardFormat === "story" ? { w: 1080, h: 1920 } : { w: 1080, h: 1080 };
+    var size = { w: 1080, h: 1080 };
     var canvas = els.cardCanvas;
     canvas.width = size.w;
     canvas.height = size.h;
@@ -799,20 +798,10 @@
       showScreen("final");
     });
 
-    els.formatPost.addEventListener("click", function () { selectCardFormat("post"); });
-    els.formatStory.addEventListener("click", function () { selectCardFormat("story"); });
-
     els.downloadCardButton.addEventListener("click", function () {
       playClick();
       downloadResultCard();
     });
-  }
-
-  function selectCardFormat(fmt) {
-    playClick();
-    state.cardFormat = fmt;
-    els.formatPost.classList.toggle("is-selected", fmt === "post");
-    els.formatStory.classList.toggle("is-selected", fmt === "story");
   }
 
 })();

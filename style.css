@@ -646,29 +646,6 @@ p {
   font-size: 1.3rem;
 }
 
-.card-format-toggle {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.format-button {
-  min-width: var(--touch-min);
-  min-height: var(--touch-min);
-  border-radius: 8px;
-  border: 2px solid var(--color-accent);
-  background: transparent;
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  cursor: pointer;
-}
-
-.format-button.is-selected {
-  background: var(--color-accent);
-  color: var(--color-paper);
-}
-
 .final-actions {
   display: flex;
   flex-direction: column;
