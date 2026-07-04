@@ -124,6 +124,9 @@ p {
 
 .body-text {
   font-size: 1.05rem;
+  /* game.json хранит абзацы через \n\n (миссия, тексты концовок) —
+     textContent их не разбивает, разрыв нужно рендерить через CSS. */
+  white-space: pre-line;
 }
 
 .handwritten {
