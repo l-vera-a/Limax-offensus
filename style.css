@@ -129,7 +129,10 @@ p {
 .handwritten {
   font-family: var(--font-hand);
   font-size: 1.35rem;
-  color: var(--color-accent);
+  /* Тонкие рукописные штрихи Marck Script нечитаемы при контрасте ниже
+     AA — используем --color-ink (не --color-accent), это держит >=7:1
+     (AAA) на всех бумажных фонах интерфейса. */
+  color: var(--color-ink);
   margin: 0 0 1rem;
 }
 
@@ -334,7 +337,7 @@ p {
 .disclaimer-sticker p {
   font-family: var(--font-hand);
   font-size: 1.15rem;
-  color: var(--color-accent);
+  color: var(--color-ink);
   margin: 0;
 }
 
@@ -582,7 +585,7 @@ p {
 .journal-tag {
   font-family: var(--font-hand);
   font-size: 1.1rem;
-  color: var(--color-accent);
+  color: var(--color-ink);
 }
 
 /* ==========================================================================
