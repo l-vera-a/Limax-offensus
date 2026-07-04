@@ -74,11 +74,22 @@ p {
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
-  animation: fade-in 0.35s ease;
 }
 
+/*
+ * Видимость экрана — только через атрибут [hidden], в одном месте.
+ * Правила показа гейтятся через :not([hidden]), поэтому никогда не
+ * пересекаются по каскаду с [hidden] { display: none } — это разные,
+ * взаимоисключающие состояния одного и того же селектора, а не два
+ * правила разной специфичности, спорящие за один и тот же display.
+ */
 .screen[hidden] {
-  display: none !important;
+  display: none;
+}
+
+.screen:not([hidden]) {
+  display: block;
+  animation: fade-in 0.35s ease;
 }
 
 @keyframes fade-in {
@@ -220,7 +231,7 @@ p {
    1. Титул
    ========================================================================== */
 
-#screen-title {
+#screen-title:not([hidden]) {
   display: flex;
   align-items: center;
   justify-content: center;
