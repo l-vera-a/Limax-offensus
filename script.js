@@ -446,7 +446,6 @@
     state.prodvizhenie += outcome.prodvizhenie;
     state.history.push({
       day: day.day,
-      dayTitle: day.title,
       dayPrinciple: day.principle,
       daySituation: day.situation,
       dayArtifact: day.artifact,
@@ -602,7 +601,7 @@
         '<p class="journal-artifact-note"></p>' +
         '</div>';
 
-      item.querySelector(".journal-day").textContent = dayLabel + " — " + t(entry.dayTitle);
+      item.querySelector(".journal-day").textContent = dayLabel;
       item.querySelector(".journal-principle").textContent = t(entry.dayPrinciple);
       item.querySelector(".journal-situation").textContent = t(entry.daySituation);
       item.querySelector(".journal-artifact-name").textContent = tx("artifactLabel") + ": " + t(entry.dayArtifact);
