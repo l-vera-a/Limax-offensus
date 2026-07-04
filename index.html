@@ -51,7 +51,14 @@
   <!-- 3. Знакомство с командой -->
   <section id="screen-team" class="screen" data-screen="team" hidden>
     <div class="screen-inner">
-      <div id="team-grid"></div>
+      <div class="team-carousel">
+        <button id="team-prev" class="carousel-arrow carousel-arrow-prev" type="button">‹</button>
+        <div id="team-viewport" class="team-viewport">
+          <div id="team-track"></div>
+        </div>
+        <button id="team-next" class="carousel-arrow carousel-arrow-next" type="button">›</button>
+      </div>
+      <div id="team-dots" class="team-dots" aria-hidden="true"></div>
       <button id="go-button" class="btn btn-primary" type="button"></button>
     </div>
   </section>
