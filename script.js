@@ -10,6 +10,8 @@
       continueButtonDay: "Продолжить экспедицию (День {n} из {total})",
       restartLink: "Начать заново",
       restartConfirm: "Текущий прогресс партии будет стёрт. Начать заново?",
+      clearHistoryLink: "Очистить историю",
+      clearHistoryConfirm: "Статистика сыгранных партий будет стёрта без возможности восстановления. Очистить?",
       playedCount: "Сыграно партий: ",
       bestEnding: ". Лучшая концовка: ",
       journalBack: "Закрыть журнал",
@@ -34,6 +36,8 @@
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
       restartLink: "Почати заново",
       restartConfirm: "Поточний прогрес партії буде стерто. Почати заново?",
+      clearHistoryLink: "Очистити історію",
+      clearHistoryConfirm: "Статистику зіграних партій буде стерто без можливості відновлення. Очистити?",
       playedCount: "Зіграно партій: ",
       bestEnding: ". Найкраща кінцівка: ",
       journalBack: "Закрити журнал",
@@ -104,7 +108,7 @@
     [
       "mute-toggle",
       "screen-title", "latin-title", "lang-switch", "title-reveal", "subtitle-text",
-      "played-count-line", "start-button", "reset-button",
+      "played-count-line", "clear-history-button", "start-button", "reset-button",
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
       "screen-team", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
@@ -158,6 +162,10 @@
 
   function clearProgress() {
     localStorage.removeItem(STORAGE_PROGRESS);
+  }
+
+  function clearHistory() {
+    localStorage.removeItem(STORAGE_HISTORY);
   }
 
   function pushMatchHistory(record) {
@@ -223,6 +231,14 @@
         renderTitleScreen();
       }
     });
+
+    els.clearHistoryButton.addEventListener("click", function () {
+      playClick();
+      if (window.confirm(tx("clearHistoryConfirm"))) {
+        clearHistory();
+        renderTitleScreen();
+      }
+    });
   }
 
   function setLang(lang) {
@@ -257,8 +273,11 @@
       var bestEnding = findEnding(best.endingId);
       els.playedCountLine.textContent = tx("playedCount") + matchHistory.length +
         (bestEnding ? tx("bestEnding") + t(bestEnding.title) : "");
+      els.clearHistoryButton.textContent = tx("clearHistoryLink");
+      els.clearHistoryButton.hidden = false;
     } else {
       els.playedCountLine.textContent = "";
+      els.clearHistoryButton.hidden = true;
     }
   }
 

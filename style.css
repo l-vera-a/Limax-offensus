@@ -315,12 +315,20 @@ p {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+.title-stats {
+  margin-bottom: 1.25rem;
+}
+
 #played-count-line {
   font-family: var(--font-mono);
   font-size: 0.85rem;
   opacity: 0.85;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.35rem;
   min-height: 1.2em;
+}
+
+#clear-history-button {
+  margin-bottom: 0;
 }
 
 #title-reveal .btn-primary {
