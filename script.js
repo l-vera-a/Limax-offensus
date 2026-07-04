@@ -24,7 +24,8 @@
       teamNextLabel: "Следующий участник",
       statBdLabel: "Дух",
       statProdLabel: "Прогресс",
-      dayOfTotal: "из {total}"
+      dayOfTotal: "из {total}",
+      artifactLabel: "Артефакт дня"
     },
     uk: {
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
@@ -44,7 +45,8 @@
       teamNextLabel: "Наступний учасник",
       statBdLabel: "Дух",
       statProdLabel: "Прогрес",
-      dayOfTotal: "з {total}"
+      dayOfTotal: "з {total}",
+      artifactLabel: "Артефакт дня"
     }
   };
 
@@ -418,6 +420,8 @@
       dayTitle: day.title,
       dayPrinciple: day.principle,
       daySituation: day.situation,
+      dayArtifact: day.artifact,
+      dayArtifactNote: day.artifactNote,
       optionId: option.id,
       optionText: option.text,
       outcomeText: outcome.text,
@@ -552,11 +556,17 @@
         '<div class="journal-deltas">' +
         '<span class="delta"></span><span class="delta"></span>' +
         '<span class="journal-tag"></span>' +
+        '</div>' +
+        '<div class="journal-artifact">' +
+        '<p class="journal-artifact-name"></p>' +
+        '<p class="journal-artifact-note"></p>' +
         '</div>';
 
       item.querySelector(".journal-day").textContent = dayLabel + " — " + t(entry.dayTitle);
       item.querySelector(".journal-principle").textContent = t(entry.dayPrinciple);
       item.querySelector(".journal-situation").textContent = t(entry.daySituation);
+      item.querySelector(".journal-artifact-name").textContent = tx("artifactLabel") + ": " + t(entry.dayArtifact);
+      item.querySelector(".journal-artifact-note").textContent = t(entry.dayArtifactNote);
       item.querySelector(".journal-option").textContent = t(entry.optionText);
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
       item.querySelector(".journal-deltas .journal-tag").textContent = luckTag;
