@@ -608,6 +608,27 @@ p {
   margin-bottom: 1rem;
 }
 
+.outcome-artifact {
+  margin-bottom: 1.25rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(46, 32, 22, 0.25);
+}
+
+.outcome-artifact-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.25rem;
+}
+
+.outcome-artifact-note {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin-bottom: 0;
+}
+
 /* ==========================================================================
    6. Финал
    ========================================================================== */
@@ -644,29 +665,6 @@ p {
   justify-content: center;
   margin: 1rem 0 1.25rem;
   font-size: 1.3rem;
-}
-
-.card-format-toggle {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.format-button {
-  min-width: var(--touch-min);
-  min-height: var(--touch-min);
-  border-radius: 8px;
-  border: 2px solid var(--color-accent);
-  background: transparent;
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  cursor: pointer;
-}
-
-.format-button.is-selected {
-  background: var(--color-accent);
-  color: var(--color-paper);
 }
 
 .final-actions {

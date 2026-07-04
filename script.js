@@ -73,7 +73,6 @@
     history: [],
     failed: false,
     endingId: null,
-    cardFormat: "post",
     teamIndex: 0
   };
 
@@ -104,9 +103,10 @@
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
-      "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note", "next-button",
+      "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note",
+      "outcome-artifact-name", "outcome-artifact-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
-      "final-bd-value", "final-prod-value", "format-post", "format-story",
+      "final-bd-value", "final-prod-value",
       "download-card-button", "view-journal-button", "play-again-button", "card-canvas",
       "screen-journal", "journal-heading", "journal-list", "journal-back-button",
       "audio-ambient", "audio-click", "audio-stat-up", "audio-stat-down", "audio-fail"
@@ -433,13 +433,16 @@
     state.failed = !!outcome.fail;
 
     saveProgress();
-    renderOutcome(outcome);
+    renderOutcome(day, outcome);
   }
 
-  function renderOutcome(outcome) {
+  function renderOutcome(day, outcome) {
     els.outcomeText.textContent = t(outcome.text);
     setDelta(els.deltaBd, outcome.boevoyDukh);
     setDelta(els.deltaProd, outcome.prodvizhenie);
+
+    els.outcomeArtifactName.textContent = tx("artifactLabel") + ": " + t(day.artifact);
+    els.outcomeArtifactNote.textContent = t(day.artifactNote);
 
     els.luckNote.hidden = !outcome.luck;
     if (outcome.luck) els.luckNote.textContent = "🍀 " + t(game.ui.luckTag);
@@ -585,7 +588,7 @@
 
   function downloadResultCard() {
     var ending = findEnding(state.endingId);
-    var size = state.cardFormat === "story" ? { w: 1080, h: 1920 } : { w: 1080, h: 1080 };
+    var size = { w: 1080, h: 1080 };
     var canvas = els.cardCanvas;
     canvas.width = size.w;
     canvas.height = size.h;
@@ -799,20 +802,10 @@
       showScreen("final");
     });
 
-    els.formatPost.addEventListener("click", function () { selectCardFormat("post"); });
-    els.formatStory.addEventListener("click", function () { selectCardFormat("story"); });
-
     els.downloadCardButton.addEventListener("click", function () {
       playClick();
       downloadResultCard();
     });
-  }
-
-  function selectCardFormat(fmt) {
-    playClick();
-    state.cardFormat = fmt;
-    els.formatPost.classList.toggle("is-selected", fmt === "post");
-    els.formatStory.classList.toggle("is-selected", fmt === "story");
   }
 
 })();
