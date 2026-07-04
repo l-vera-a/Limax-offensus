@@ -103,7 +103,7 @@
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
-      "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note",
+      "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note",
       "outcome-artifact-name", "outcome-artifact-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
       "final-bd-value", "final-prod-value",
@@ -379,6 +379,8 @@
 
     els.statBdLabel.textContent = tx("statBdLabel");
     els.statProdLabel.textContent = tx("statProdLabel");
+    els.deltaBdLabel.textContent = tx("statBdLabel");
+    els.deltaProdLabel.textContent = tx("statProdLabel");
     setStatDisplay(els.statBdValue, state.boevoyDukh, animateStats);
     setStatDisplay(els.statProdValue, state.prodvizhenie, animateStats);
 
@@ -557,7 +559,14 @@
         '<p class="journal-option"></p>' +
         '<p class="journal-outcome"></p>' +
         '<div class="journal-deltas">' +
-        '<span class="delta"></span><span class="delta"></span>' +
+        '<span class="delta-item">' +
+        '<img src="assets/img/icon-boevoy-dukh.png" alt="" class="delta-icon">' +
+        '<span class="delta-label"></span><span class="delta"></span>' +
+        '</span>' +
+        '<span class="delta-item">' +
+        '<img src="assets/img/icon-prodvizhenie.png" alt="" class="delta-icon">' +
+        '<span class="delta-label"></span><span class="delta"></span>' +
+        '</span>' +
         '<span class="journal-tag"></span>' +
         '</div>' +
         '<div class="journal-artifact">' +
@@ -573,6 +582,10 @@
       item.querySelector(".journal-option").textContent = t(entry.optionText);
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
       item.querySelector(".journal-deltas .journal-tag").textContent = luckTag;
+
+      var deltaLabels = item.querySelectorAll(".journal-deltas .delta-label");
+      deltaLabels[0].textContent = tx("statBdLabel");
+      deltaLabels[1].textContent = tx("statProdLabel");
 
       var deltas = item.querySelectorAll(".journal-deltas .delta");
       setDelta(deltas[0], entry.boevoyDukh);
