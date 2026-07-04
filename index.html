@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Limax offensus — Экспедиция за Слизнем Обиженным</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Marck+Script&family=PT+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <button id="mute-toggle" class="icon-button" type="button" aria-label="Звук">🔊</button>
+
+  <!-- 1. Титул -->
+  <section id="screen-title" class="screen" data-screen="title">
+    <div class="title-bg"></div>
+    <div class="screen-inner title-inner">
+      <h1 id="latin-title">Limax offensus</h1>
+
+      <div id="lang-switch">
+        <button class="lang-button" type="button" data-lang="ru">Русский</button>
+        <button class="lang-button" type="button" data-lang="uk">Українська</button>
+      </div>
+
+      <div id="title-reveal" hidden>
+        <h2 id="subtitle-text"></h2>
+        <p id="played-count-line"></p>
+        <button id="start-button" class="btn btn-primary" type="button"></button>
+        <button id="reset-button" class="btn btn-text" type="button"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Миссия -->
+  <section id="screen-mission" class="screen" data-screen="mission" hidden>
+    <div class="screen-inner">
+      <img id="mission-sketch" class="artifact-img" src="assets/img/slizen-sketch.jpg" alt="" loading="lazy">
+      <div class="paper-panel">
+        <p id="mission-text"></p>
+      </div>
+      <div class="disclaimer-sticker">
+        <p id="disclaimer-text"></p>
+      </div>
+      <button id="meet-team-button" class="btn btn-primary" type="button"></button>
+    </div>
+  </section>
+
+  <!-- 3. Знакомство с командой -->
+  <section id="screen-team" class="screen" data-screen="team" hidden>
+    <div class="screen-inner">
+      <div id="team-grid"></div>
+      <button id="go-button" class="btn btn-primary" type="button"></button>
+    </div>
+  </section>
+
+  <!-- 4 + 5. Экран дня / Экран исхода (общий контейнер, две подсекции) -->
+  <section id="screen-day" class="screen" data-screen="day" hidden>
+    <header class="stats-header">
+      <div class="stat-badge">
+        <img src="assets/img/icon-boevoy-dukh.png" alt="" class="stat-icon">
+        <span id="stat-bd-value" class="stat-value">0</span>
+      </div>
+      <div id="day-counter" class="day-counter"></div>
+      <div class="stat-badge">
+        <img src="assets/img/icon-prodvizhenie.png" alt="" class="stat-icon">
+        <span id="stat-prod-value" class="stat-value">0</span>
+      </div>
+    </header>
+
+    <div class="screen-inner day-inner">
+      <img id="day-scene" class="scene-img" src="" alt="" loading="lazy">
+      <h2 id="day-title"></h2>
+      <p id="day-principle" class="handwritten"></p>
+
+      <div id="day-body">
+        <p id="day-situation" class="body-text"></p>
+        <div id="day-options"></div>
+      </div>
+
+      <div id="outcome-body" hidden>
+        <p id="outcome-text" class="body-text"></p>
+        <div class="stat-deltas">
+          <span id="delta-bd" class="delta"></span>
+          <span id="delta-prod" class="delta"></span>
+        </div>
+        <p id="luck-note" class="handwritten" hidden></p>
+        <button id="next-button" class="btn btn-primary" type="button"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Финальный экран -->
+  <section id="screen-final" class="screen" data-screen="final" hidden>
+    <div class="screen-inner final-inner">
+      <img id="final-image" class="scene-img" src="" alt="" loading="lazy">
+      <img id="final-reveal" class="artifact-img reveal-img" src="assets/img/slizen-reveal.jpg" alt="" loading="lazy" hidden>
+
+      <div class="final-heading">
+        <span id="final-emoji" class="final-emoji"></span>
+        <h2 id="final-title"></h2>
+      </div>
+
+      <p id="final-text" class="body-text"></p>
+
+      <div class="final-stats">
+        <div class="stat-badge">
+          <img src="assets/img/icon-boevoy-dukh.png" alt="" class="stat-icon">
+          <span id="final-bd-value" class="stat-value">0</span>
+        </div>
+        <div class="stat-badge">
+          <img src="assets/img/icon-prodvizhenie.png" alt="" class="stat-icon">
+          <span id="final-prod-value" class="stat-value">0</span>
+        </div>
+      </div>
+
+      <div class="card-format-toggle" role="group" aria-label="Формат карточки">
+        <button id="format-post" class="format-button is-selected" type="button" data-format="post">1:1</button>
+        <button id="format-story" class="format-button" type="button" data-format="story">9:16</button>
+      </div>
+
+      <div class="final-actions">
+        <button id="download-card-button" class="btn btn-primary" type="button"></button>
+        <button id="view-journal-button" class="btn btn-secondary" type="button"></button>
+        <button id="play-again-button" class="btn btn-text" type="button"></button>
+      </div>
+
+      <canvas id="card-canvas" hidden></canvas>
+    </div>
+  </section>
+
+  <!-- 7. Журнал экспедиции -->
+  <section id="screen-journal" class="screen" data-screen="journal" hidden>
+    <div class="screen-inner">
+      <h2 id="journal-heading"></h2>
+      <div id="journal-list"></div>
+      <button id="journal-back-button" class="btn btn-primary" type="button"></button>
+    </div>
+  </section>
+
+  <audio id="audio-ambient" src="assets/audio/ambient-jungle.mp3" loop preload="none"></audio>
+  <audio id="audio-click" src="assets/audio/click.wav" preload="auto"></audio>
+  <audio id="audio-stat-up" src="assets/audio/stat-up.wav" preload="auto"></audio>
+  <audio id="audio-stat-down" src="assets/audio/stat-down.wav" preload="auto"></audio>
+  <audio id="audio-fail" src="assets/audio/fail.wav" preload="none"></audio>
+
+</div>
+<script src="js/endings.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

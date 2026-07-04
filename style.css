@@ -1,0 +1,626 @@
+/* ==========================================================================
+   Limax offensus — базовые переменные и сброс
+   ========================================================================== */
+
+:root {
+  --color-paper: #efe4c8;
+  --color-paper-dark: #e4d6b2;
+  --color-ink: #2e2016;
+  --color-ink-soft: #55442f;
+  --color-accent: #6b4226;
+  --color-accent-2: #3f5b3f;
+  --color-good: #3f6b3f;
+  --color-bad: #9a3324;
+  --color-card-bg: #f7efd9;
+  --shadow-soft: 0 6px 18px rgba(40, 26, 10, 0.25);
+  --radius-panel: 14px;
+  --font-heading: "Yeseva One", "Georgia", serif;
+  --font-body: "Old Standard TT", "Georgia", serif;
+  --font-hand: "Marck Script", cursive;
+  --font-mono: "PT Mono", "Courier New", monospace;
+  --touch-min: 44px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+/* ==========================================================================
+   Экраны
+   ========================================================================== */
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.screen {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  animation: fade-in 0.35s ease;
+}
+
+.screen[hidden] {
+  display: none !important;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.screen-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem calc(2.5rem + env(safe-area-inset-bottom));
+}
+
+/* Общая "бумажная" панель с текстурой */
+.paper-panel,
+.disclaimer-sticker,
+.team-card,
+.journal-entry,
+#day-body,
+#outcome-body {
+  background-color: var(--color-card-bg);
+  background-image: url("assets/img/paper-texture.jpg");
+  background-size: cover;
+  background-blend-mode: multiply;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-soft);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.body-text {
+  font-size: 1.05rem;
+}
+
+.handwritten {
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  color: var(--color-accent);
+  margin: 0 0 1rem;
+}
+
+.artifact-img {
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-soft);
+  margin: 0 auto 1.25rem;
+}
+
+.scene-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 1.25rem;
+}
+
+/* ==========================================================================
+   Кнопки
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  padding: 0.75rem 1.5rem;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-paper);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-primary:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(40, 26, 10, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px) scale(0.98);
+  background: rgba(107, 66, 38, 0.08);
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--color-ink-soft);
+  text-decoration: underline;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  box-shadow: none;
+}
+
+.btn-text:active {
+  opacity: 0.6;
+}
+
+@media (hover: hover) {
+  .btn-primary:hover { box-shadow: 0 8px 22px rgba(40, 26, 10, 0.32); }
+  .btn-secondary:hover { background: rgba(107, 66, 38, 0.08); }
+}
+
+.icon-button {
+  position: fixed;
+  top: calc(0.75rem + env(safe-area-inset-top));
+  right: calc(0.75rem + env(safe-area-inset-right));
+  z-index: 50;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: 50%;
+  border: none;
+  background: rgba(46, 32, 22, 0.75);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.icon-button:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   1. Титул
+   ========================================================================== */
+
+#screen-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.title-bg {
+  position: absolute;
+  inset: 0;
+  background: url("assets/img/cover.jpg") center / cover no-repeat;
+}
+
+.title-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 14, 8, 0.55);
+}
+
+.title-inner {
+  color: #fdf6e3;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+#latin-title {
+  font-size: clamp(2.4rem, 9vw, 4rem);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+#lang-switch {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.lang-button {
+  min-height: var(--touch-min);
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  border: 2px solid #fdf6e3;
+  background: transparent;
+  color: #fdf6e3;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.lang-button.is-selected {
+  background: #fdf6e3;
+  color: var(--color-ink);
+}
+
+#title-reveal[hidden] {
+  display: none;
+}
+
+#subtitle-text {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#played-count-line {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 1.25rem;
+  min-height: 1.2em;
+}
+
+#title-reveal .btn-primary {
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#title-reveal .btn-text {
+  color: #fdf6e3;
+}
+
+/* ==========================================================================
+   2. Миссия
+   ========================================================================== */
+
+#mission-sketch {
+  max-width: 220px;
+}
+
+.disclaimer-sticker {
+  background-color: #f4e2c4;
+  transform: rotate(-1.2deg);
+  border: 1px dashed var(--color-accent);
+}
+
+.disclaimer-sticker p {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+/* ==========================================================================
+   3. Команда
+   ========================================================================== */
+
+#team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-card {
+  text-align: center;
+}
+
+.team-portrait {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 0.75rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.team-name {
+  font-size: 1.15rem;
+  margin-bottom: 0.15rem;
+}
+
+.team-role {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.5rem;
+}
+
+.team-bio {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   4/5. День и Исход
+   ========================================================================== */
+
+.stats-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: calc(0.6rem + env(safe-area-inset-top)) 1rem 0.6rem;
+  background: rgba(239, 228, 200, 0.92);
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba(46, 32, 22, 0.15);
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  min-width: 0;
+}
+
+.stat-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.stat-value {
+  min-width: 2.5ch;
+  text-align: center;
+}
+
+.day-counter {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.day-inner #day-title {
+  font-size: 1.6rem;
+}
+
+#day-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.option-button {
+  min-height: 56px;
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  background: var(--color-card-bg);
+  background-image: url("assets/img/paper-texture.jpg");
+  background-size: cover;
+  background-blend-mode: multiply;
+  border: 2px solid var(--color-accent);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--color-ink);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.12s ease;
+}
+
+.option-button:active {
+  transform: scale(0.98) rotate(-0.3deg);
+  background-color: var(--color-paper-dark);
+}
+
+@media (hover: hover) {
+  .option-button:hover {
+    transform: rotate(-0.3deg);
+    box-shadow: 0 8px 20px rgba(40, 26, 10, 0.3);
+  }
+}
+
+.stat-deltas {
+  display: flex;
+  gap: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.delta-up { color: var(--color-good); }
+.delta-down { color: var(--color-bad); }
+.delta-zero { color: var(--color-ink-soft); }
+
+#luck-note {
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   6. Финал
+   ========================================================================== */
+
+.final-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.final-emoji {
+  font-size: 2rem;
+}
+
+.final-heading h2 {
+  font-size: 1.7rem;
+  margin: 0;
+}
+
+.reveal-img {
+  max-width: 160px;
+  float: right;
+  margin: 0 0 1rem 1rem;
+}
+
+.reveal-img[hidden] {
+  display: none;
+}
+
+.final-stats {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin: 1rem 0 1.25rem;
+  font-size: 1.3rem;
+}
+
+.card-format-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.format-button {
+  min-width: var(--touch-min);
+  min-height: var(--touch-min);
+  border-radius: 8px;
+  border: 2px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+.format-button.is-selected {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}
+
+.final-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+#card-canvas {
+  display: none;
+}
+
+/* ==========================================================================
+   7. Журнал
+   ========================================================================== */
+
+.journal-entry .journal-day {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.journal-entry .journal-option {
+  font-style: italic;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.35rem;
+}
+
+.journal-entry .journal-outcome {
+  margin-bottom: 0.5rem;
+}
+
+.journal-deltas {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+}
+
+.journal-tag {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Планшет и десктоп
+   ========================================================================== */
+
+@media (min-width: 640px) {
+  body { font-size: 18px; }
+
+  .screen-inner {
+    padding: 2.5rem 2rem 3rem;
+  }
+
+  #team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #day-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .final-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .final-actions .btn {
+    width: auto;
+    min-width: 220px;
+  }
+
+  #title-reveal .btn-primary {
+    width: auto;
+    min-width: 320px;
+  }
+}
+
+@media (min-width: 960px) {
+  .screen-inner {
+    max-width: 860px;
+  }
+
+  #team-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  #latin-title {
+    font-size: 5rem;
+  }
+}
