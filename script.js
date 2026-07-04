@@ -18,7 +18,10 @@
       journalHeading: "Журнал экспедиции",
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
-      workedTag: "сработало",
+      luckTagLabel: "Повезло",
+      workedTag: "Сработало",
+      failedTag: "Не сработало",
+      ambiguousTag: "Неоднозначно",
       failedDayLabel: "День {n} — провал экспедиции",
       dayLabel: "День {n}",
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
@@ -44,7 +47,10 @@
       journalHeading: "Журнал експедиції",
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
-      workedTag: "спрацювало",
+      luckTagLabel: "Пощастило",
+      workedTag: "Спрацювало",
+      failedTag: "Не спрацювало",
+      ambiguousTag: "Неоднозначно",
       failedDayLabel: "День {n} — провал експедиції",
       dayLabel: "День {n}",
       downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
@@ -456,6 +462,7 @@
       boevoyDukh: outcome.boevoyDukh,
       prodvizhenie: outcome.prodvizhenie,
       luck: !!outcome.luck,
+      luckNote: outcome.luckNote,
       fail: !!outcome.fail
     });
     state.failed = !!outcome.fail;
@@ -491,6 +498,13 @@
     el.textContent = (value > 0 ? "+" : "") + value;
     el.classList.remove("delta-up", "delta-down", "delta-zero");
     el.classList.add(value > 0 ? "delta-up" : value < 0 ? "delta-down" : "delta-zero");
+  }
+
+  function journalTagState(entry) {
+    if (entry.luck) return "luck";
+    if (entry.boevoyDukh >= 0 && entry.prodvizhenie >= 0) return "worked";
+    if (entry.boevoyDukh <= 0 && entry.prodvizhenie <= 0) return "failed";
+    return "ambiguous";
   }
 
   function bindNextButton() {
@@ -575,9 +589,13 @@
         ? format(tx("failedDayLabel"), { n: entry.day })
         : format(tx("dayLabel"), { n: entry.day });
 
-      var luckTag = entry.luck
-        ? "🍀 " + t(game.ui.luckTag)
-        : "✅ " + tx("workedTag");
+      var tagState = journalTagState(entry);
+      var tagContent = {
+        luck: { emoji: "🍀", text: tx("luckTagLabel") },
+        worked: { emoji: "✅", text: tx("workedTag") },
+        failed: { emoji: "❌", text: tx("failedTag") },
+        ambiguous: { emoji: "➖", text: tx("ambiguousTag") }
+      }[tagState];
 
       item.innerHTML =
         '<h3 class="journal-day"></h3>' +
@@ -596,6 +614,7 @@
         '</span>' +
         '<span class="journal-tag"></span>' +
         '</div>' +
+        '<p class="journal-luck-note" hidden></p>' +
         '<div class="journal-artifact">' +
         '<p class="journal-artifact-name"></p>' +
         '<p class="journal-artifact-note"></p>' +
@@ -608,7 +627,16 @@
       item.querySelector(".journal-artifact-note").textContent = t(entry.dayArtifactNote);
       item.querySelector(".journal-option").textContent = t(entry.optionText);
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
-      item.querySelector(".journal-deltas .journal-tag").textContent = luckTag;
+
+      var tagEl = item.querySelector(".journal-deltas .journal-tag");
+      tagEl.textContent = tagContent.emoji + " " + tagContent.text;
+      tagEl.className = "journal-tag tag-" + tagState;
+
+      var luckNoteEl = item.querySelector(".journal-luck-note");
+      if (tagState === "luck" && entry.luckNote) {
+        luckNoteEl.textContent = t(entry.luckNote);
+        luckNoteEl.hidden = false;
+      }
 
       var deltaLabels = item.querySelectorAll(".journal-deltas .delta-label");
       deltaLabels[0].textContent = tx("statBdLabel");

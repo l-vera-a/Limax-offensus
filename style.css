@@ -789,6 +789,17 @@ p {
   color: var(--color-ink);
 }
 
+.journal-tag.tag-worked { color: var(--color-good); }
+.journal-tag.tag-failed { color: var(--color-bad); }
+.journal-tag.tag-ambiguous { color: var(--color-ink-soft); }
+
+.journal-luck-note {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin: 0.5rem 0 0;
+}
+
 .journal-artifact {
   margin-top: 0.75rem;
   padding-top: 0.6rem;
