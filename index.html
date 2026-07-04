@@ -91,8 +91,16 @@
       <div id="outcome-body" hidden>
         <p id="outcome-text" class="body-text"></p>
         <div class="stat-deltas">
-          <span id="delta-bd" class="delta"></span>
-          <span id="delta-prod" class="delta"></span>
+          <span class="delta-item">
+            <img src="assets/img/icon-boevoy-dukh.png" alt="" class="delta-icon">
+            <span id="delta-bd-label" class="delta-label"></span>
+            <span id="delta-bd" class="delta"></span>
+          </span>
+          <span class="delta-item">
+            <img src="assets/img/icon-prodvizhenie.png" alt="" class="delta-icon">
+            <span id="delta-prod-label" class="delta-label"></span>
+            <span id="delta-prod" class="delta"></span>
+          </span>
         </div>
         <p id="luck-note" class="handwritten" hidden></p>
         <div id="outcome-artifact" class="outcome-artifact">
@@ -141,8 +149,20 @@
   <!-- 7. Журнал экспедиции -->
   <section id="screen-journal" class="screen" data-screen="journal" hidden>
     <div class="screen-inner">
-      <h2 id="journal-heading"></h2>
-      <div id="journal-list"></div>
+      <div class="journal-top">
+        <h2 id="journal-heading"></h2>
+        <div id="journal-counter" class="day-counter">
+          <span id="journal-counter-number" class="day-counter-number"></span>
+          <span id="journal-counter-total" class="day-counter-total"></span>
+        </div>
+      </div>
+      <div class="journal-carousel">
+        <button id="journal-prev" class="carousel-arrow carousel-arrow-prev" type="button">‹</button>
+        <div id="journal-viewport" class="journal-viewport">
+          <div id="journal-track"></div>
+        </div>
+        <button id="journal-next" class="carousel-arrow carousel-arrow-next" type="button">›</button>
+      </div>
       <button id="journal-back-button" class="btn btn-primary" type="button"></button>
     </div>
   </section>

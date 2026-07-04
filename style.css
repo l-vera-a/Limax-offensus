@@ -595,9 +595,32 @@ p {
 .stat-deltas {
   display: flex;
   gap: 1.5rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.delta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.delta-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.delta-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+}
+
+.delta {
   font-family: var(--font-mono);
   font-size: 1.3rem;
-  margin: 0.5rem 0 1rem;
 }
 
 .delta-up { color: var(--color-good); }
@@ -680,6 +703,46 @@ p {
    7. Журнал
    ========================================================================== */
 
+.journal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  /* Место под #mute-toggle (fixed, справа сверху), как у .stats-header. */
+  padding-right: calc(var(--touch-min) + 0.5rem + env(safe-area-inset-right));
+}
+
+.journal-top h2 {
+  margin-bottom: 0;
+}
+
+.journal-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.journal-viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+#journal-track {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+#journal-track > .journal-entry {
+  flex: 0 0 100%;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
+
 .journal-entry .journal-day {
   font-size: 1.05rem;
   margin-bottom: 0.35rem;
@@ -708,8 +771,8 @@ p {
 .journal-deltas {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
-  font-family: var(--font-mono);
 }
 
 .journal-tag {

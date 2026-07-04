@@ -12,7 +12,7 @@
       restartConfirm: "Текущий прогресс партии будет стёрт. Начать заново?",
       playedCount: "Сыграно партий: ",
       bestEnding: ". Лучшая концовка: ",
-      journalBack: "Назад",
+      journalBack: "Закрыть журнал",
       journalHeading: "Журнал экспедиции",
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
@@ -22,6 +22,9 @@
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
       teamPrevLabel: "Предыдущий участник",
       teamNextLabel: "Следующий участник",
+      journalPrevLabel: "Предыдущая запись",
+      journalNextLabel: "Следующая запись",
+      journalPageLabel: "Страница {n} из {total}",
       statBdLabel: "Дух",
       statProdLabel: "Прогресс",
       dayOfTotal: "из {total}",
@@ -33,7 +36,7 @@
       restartConfirm: "Поточний прогрес партії буде стерто. Почати заново?",
       playedCount: "Зіграно партій: ",
       bestEnding: ". Найкраща кінцівка: ",
-      journalBack: "Назад",
+      journalBack: "Закрити журнал",
       journalHeading: "Журнал експедиції",
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
@@ -43,6 +46,9 @@
       downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
       teamPrevLabel: "Попередній учасник",
       teamNextLabel: "Наступний учасник",
+      journalPrevLabel: "Попередній запис",
+      journalNextLabel: "Наступний запис",
+      journalPageLabel: "Сторінка {n} з {total}",
       statBdLabel: "Дух",
       statProdLabel: "Прогрес",
       dayOfTotal: "з {total}",
@@ -73,7 +79,8 @@
     history: [],
     failed: false,
     endingId: null,
-    teamIndex: 0
+    teamIndex: 0,
+    journalIndex: 0
   };
 
   var els = {};
@@ -103,12 +110,13 @@
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
-      "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note",
+      "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note",
       "outcome-artifact-name", "outcome-artifact-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
       "final-bd-value", "final-prod-value",
       "download-card-button", "view-journal-button", "play-again-button", "card-canvas",
-      "screen-journal", "journal-heading", "journal-list", "journal-back-button",
+      "screen-journal", "journal-heading", "journal-counter", "journal-counter-number", "journal-counter-total",
+      "journal-viewport", "journal-track", "journal-prev", "journal-next", "journal-back-button",
       "audio-ambient", "audio-click", "audio-stat-up", "audio-stat-down", "audio-fail"
     ].forEach(function (id) {
       els[toCamel(id)] = document.getElementById(id);
@@ -379,6 +387,8 @@
 
     els.statBdLabel.textContent = tx("statBdLabel");
     els.statProdLabel.textContent = tx("statProdLabel");
+    els.deltaBdLabel.textContent = tx("statBdLabel");
+    els.deltaProdLabel.textContent = tx("statProdLabel");
     setStatDisplay(els.statBdValue, state.boevoyDukh, animateStats);
     setStatDisplay(els.statProdValue, state.prodvizhenie, animateStats);
 
@@ -536,7 +546,8 @@
   function renderJournalScreen() {
     els.journalHeading.textContent = tx("journalHeading");
     els.journalBackButton.textContent = tx("journalBack");
-    els.journalList.innerHTML = "";
+    els.journalTrack.innerHTML = "";
+    state.journalIndex = 0;
 
     state.history.forEach(function (entry) {
       var item = document.createElement("div");
@@ -557,7 +568,14 @@
         '<p class="journal-option"></p>' +
         '<p class="journal-outcome"></p>' +
         '<div class="journal-deltas">' +
-        '<span class="delta"></span><span class="delta"></span>' +
+        '<span class="delta-item">' +
+        '<img src="assets/img/icon-boevoy-dukh.png" alt="" class="delta-icon">' +
+        '<span class="delta-label"></span><span class="delta"></span>' +
+        '</span>' +
+        '<span class="delta-item">' +
+        '<img src="assets/img/icon-prodvizhenie.png" alt="" class="delta-icon">' +
+        '<span class="delta-label"></span><span class="delta"></span>' +
+        '</span>' +
         '<span class="journal-tag"></span>' +
         '</div>' +
         '<div class="journal-artifact">' +
@@ -574,11 +592,68 @@
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
       item.querySelector(".journal-deltas .journal-tag").textContent = luckTag;
 
+      var deltaLabels = item.querySelectorAll(".journal-deltas .delta-label");
+      deltaLabels[0].textContent = tx("statBdLabel");
+      deltaLabels[1].textContent = tx("statProdLabel");
+
       var deltas = item.querySelectorAll(".journal-deltas .delta");
       setDelta(deltas[0], entry.boevoyDukh);
       setDelta(deltas[1], entry.prodvizhenie);
 
-      els.journalList.appendChild(item);
+      els.journalTrack.appendChild(item);
+    });
+
+    els.journalPrev.setAttribute("aria-label", tx("journalPrevLabel"));
+    els.journalNext.setAttribute("aria-label", tx("journalNextLabel"));
+    updateJournalCarousel();
+  }
+
+  function updateJournalCarousel() {
+    var total = state.history.length;
+    els.journalTrack.style.transform = "translateX(-" + (state.journalIndex * 100) + "%)";
+    els.journalCounterNumber.textContent = state.journalIndex + 1;
+    els.journalCounterTotal.textContent = format(tx("dayOfTotal"), { total: total });
+    els.journalCounter.setAttribute("aria-label", format(tx("journalPageLabel"), { n: state.journalIndex + 1, total: total }));
+    els.journalPrev.disabled = state.journalIndex === 0;
+    els.journalNext.disabled = state.journalIndex === total - 1;
+  }
+
+  function goToJournalSlide(index) {
+    var total = state.history.length;
+    state.journalIndex = Math.max(0, Math.min(total - 1, index));
+    updateJournalCarousel();
+  }
+
+  function bindJournalCarouselEvents() {
+    els.journalPrev.addEventListener("click", function () {
+      playClick();
+      goToJournalSlide(state.journalIndex - 1);
+    });
+    els.journalNext.addEventListener("click", function () {
+      playClick();
+      goToJournalSlide(state.journalIndex + 1);
+    });
+
+    var startX = null;
+    var startY = null;
+    var dragging = false;
+
+    els.journalViewport.addEventListener("pointerdown", function (e) {
+      startX = e.clientX;
+      startY = e.clientY;
+      dragging = true;
+    });
+    els.journalViewport.addEventListener("pointerup", function (e) {
+      if (!dragging) return;
+      dragging = false;
+      var dx = e.clientX - startX;
+      var dy = e.clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        goToJournalSlide(state.journalIndex + (dx < 0 ? 1 : -1));
+      }
+    });
+    els.journalViewport.addEventListener("pointercancel", function () {
+      dragging = false;
     });
   }
 
@@ -772,6 +847,7 @@
     });
 
     bindTeamCarouselEvents();
+    bindJournalCarouselEvents();
 
     els.goButton.addEventListener("click", function () {
       playClick();
