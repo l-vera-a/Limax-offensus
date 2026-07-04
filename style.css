@@ -608,6 +608,27 @@ p {
   margin-bottom: 1rem;
 }
 
+.outcome-artifact {
+  margin-bottom: 1.25rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(46, 32, 22, 0.25);
+}
+
+.outcome-artifact-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.25rem;
+}
+
+.outcome-artifact-note {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin-bottom: 0;
+}
+
 /* ==========================================================================
    6. Финал
    ========================================================================== */
