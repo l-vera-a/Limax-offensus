@@ -21,7 +21,10 @@
       dayLabel: "День {n}",
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
       teamPrevLabel: "Предыдущий участник",
-      teamNextLabel: "Следующий участник"
+      teamNextLabel: "Следующий участник",
+      statBdLabel: "Дух",
+      statProdLabel: "Прогресс",
+      dayOfTotal: "из {total}"
     },
     uk: {
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
@@ -38,7 +41,10 @@
       dayLabel: "День {n}",
       downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
       teamPrevLabel: "Попередній учасник",
-      teamNextLabel: "Наступний учасник"
+      teamNextLabel: "Наступний учасник",
+      statBdLabel: "Дух",
+      statProdLabel: "Прогрес",
+      dayOfTotal: "з {total}"
     }
   };
 
@@ -93,8 +99,9 @@
       "played-count-line", "start-button", "reset-button",
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
       "screen-team", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
-      "screen-day", "stat-bd-value", "stat-prod-value", "day-counter", "day-scene",
-      "day-title", "day-principle", "day-body", "day-situation", "day-options",
+      "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
+      "day-counter", "day-counter-number", "day-counter-total", "day-scene",
+      "day-body", "day-situation", "day-options",
       "outcome-body", "outcome-text", "delta-bd", "delta-prod", "luck-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
       "final-bd-value", "final-prod-value", "format-post", "format-story",
@@ -361,13 +368,15 @@
   function renderDayScreen(animateStats) {
     var day = currentDay();
 
-    els.dayCounter.textContent = format(t(game.ui.dayCounter), { n: day.day });
+    els.dayCounterNumber.textContent = day.day;
+    els.dayCounterTotal.textContent = format(tx("dayOfTotal"), { total: game.days.length });
+    els.dayCounter.setAttribute("aria-label", format(t(game.ui.dayCounter), { n: day.day }));
     els.dayScene.src = day.scene;
     els.dayScene.alt = t(day.title);
-    els.dayTitle.textContent = t(day.title);
-    els.dayPrinciple.textContent = t(day.principle);
     els.daySituation.textContent = t(day.situation);
 
+    els.statBdLabel.textContent = tx("statBdLabel");
+    els.statProdLabel.textContent = tx("statProdLabel");
     setStatDisplay(els.statBdValue, state.boevoyDukh, animateStats);
     setStatDisplay(els.statProdValue, state.prodvizhenie, animateStats);
 
@@ -407,6 +416,8 @@
     state.history.push({
       day: day.day,
       dayTitle: day.title,
+      dayPrinciple: day.principle,
+      daySituation: day.situation,
       optionId: option.id,
       optionText: option.text,
       outcomeText: outcome.text,
@@ -528,19 +539,27 @@
         ? format(tx("failedDayLabel"), { n: entry.day })
         : format(tx("dayLabel"), { n: entry.day });
 
-      var luckBadge = entry.luck ? '<span class="journal-tag">🍀 ' + t(game.ui.luckTag) + '</span>' : "";
+      var luckTag = entry.luck
+        ? "🍀 " + t(game.ui.luckTag)
+        : "✅ " + tx("workedTag");
 
       item.innerHTML =
         '<h3 class="journal-day"></h3>' +
+        '<p class="journal-principle handwritten"></p>' +
+        '<p class="journal-situation body-text"></p>' +
         '<p class="journal-option"></p>' +
         '<p class="journal-outcome"></p>' +
         '<div class="journal-deltas">' +
-        '<span class="delta"></span><span class="delta"></span>' + luckBadge +
+        '<span class="delta"></span><span class="delta"></span>' +
+        '<span class="journal-tag"></span>' +
         '</div>';
 
       item.querySelector(".journal-day").textContent = dayLabel + " — " + t(entry.dayTitle);
+      item.querySelector(".journal-principle").textContent = t(entry.dayPrinciple);
+      item.querySelector(".journal-situation").textContent = t(entry.daySituation);
       item.querySelector(".journal-option").textContent = t(entry.optionText);
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
+      item.querySelector(".journal-deltas .journal-tag").textContent = luckTag;
 
       var deltas = item.querySelectorAll(".journal-deltas .delta");
       setDelta(deltas[0], entry.boevoyDukh);
