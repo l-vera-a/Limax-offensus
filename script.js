@@ -120,7 +120,7 @@
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
-      "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note",
+      "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note", "luck-explanation",
       "outcome-artifact-name", "outcome-artifact-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
       "final-bd-value", "final-prod-value",
@@ -481,6 +481,9 @@
 
     els.luckNote.hidden = !outcome.luck;
     if (outcome.luck) els.luckNote.textContent = "🍀 " + t(game.ui.luckTag);
+
+    els.luckExplanation.hidden = !outcome.luck || !outcome.luckNote;
+    if (outcome.luck && outcome.luckNote) els.luckExplanation.textContent = t(outcome.luckNote);
 
     setStatDisplay(els.statBdValue, state.boevoyDukh, true);
     setStatDisplay(els.statProdValue, state.prodvizhenie, true);

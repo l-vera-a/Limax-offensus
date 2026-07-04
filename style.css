@@ -636,7 +636,14 @@ p {
 .delta-zero { color: var(--color-ink-soft); }
 
 #luck-note {
-  margin-bottom: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.luck-explanation {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin: 0 0 1rem;
 }
 
 .outcome-artifact {
