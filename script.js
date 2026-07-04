@@ -7,6 +7,7 @@
   // ---------------------------------------------------------------------
   var EXTRA_UI = {
     ru: {
+      continueButton: "Продолжить экспедицию",
       resetProgress: "Сбросить прогресс",
       resetConfirm: "Начать формально с нуля? Текущий прогресс и статистика партий будут стёрты.",
       playedCount: "Сыграно партий: ",
@@ -21,6 +22,7 @@
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер."
     },
     uk: {
+      continueButton: "Продовжити експедицію",
       resetProgress: "Скинути прогрес",
       resetConfirm: "Почати формально з нуля? Поточний прогрес і статистика партій будуть стерті.",
       playedCount: "Зіграно партій: ",
@@ -215,7 +217,7 @@
   function revealTitleAfterLang() {
     els.titleReveal.hidden = false;
     els.subtitleText.textContent = t(game.ui.subtitle);
-    els.startButton.textContent = t(game.ui.startButton);
+    els.startButton.textContent = loadJSON(STORAGE_PROGRESS) ? tx("continueButton") : t(game.ui.startButton);
     els.resetButton.textContent = tx("resetProgress");
 
     var matchHistory = loadJSON(STORAGE_HISTORY) || [];
