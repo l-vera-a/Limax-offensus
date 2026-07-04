@@ -158,7 +158,17 @@ p {
    Кнопки
    ========================================================================== */
 
-.btn {
+.btn[hidden] {
+  display: none;
+}
+
+/*
+ * :not([hidden]) вместо голого .btn — иначе этот display: inline-flex
+ * (тот же класс специфичности, что у [hidden]) выигрывает по origin
+ * у пользовательского [hidden] { display: none }, и hidden-атрибут на
+ * кнопке молча перестаёт работать. См. аналогичный фикс для .screen.
+ */
+.btn:not([hidden]) {
   display: inline-flex;
   align-items: center;
   justify-content: center;

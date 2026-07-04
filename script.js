@@ -7,9 +7,9 @@
   // ---------------------------------------------------------------------
   var EXTRA_UI = {
     ru: {
-      continueButton: "Продолжить экспедицию",
-      resetProgress: "Сбросить прогресс",
-      resetConfirm: "Начать формально с нуля? Текущий прогресс и статистика партий будут стёрты.",
+      continueButtonDay: "Продолжить экспедицию (День {n} из {total})",
+      restartLink: "Начать заново",
+      restartConfirm: "Текущий прогресс партии будет стёрт. Начать заново?",
       playedCount: "Сыграно партий: ",
       bestEnding: ". Лучшая концовка: ",
       journalBack: "Назад",
@@ -24,9 +24,9 @@
       teamNextLabel: "Следующий участник"
     },
     uk: {
-      continueButton: "Продовжити експедицію",
-      resetProgress: "Скинути прогрес",
-      resetConfirm: "Почати формально з нуля? Поточний прогрес і статистика партій будуть стерті.",
+      continueButtonDay: "Продовжити експедицію (День {n} з {total})",
+      restartLink: "Почати заново",
+      restartConfirm: "Поточний прогрес партії буде стерто. Почати заново?",
       playedCount: "Зіграно партій: ",
       bestEnding: ". Найкраща кінцівка: ",
       journalBack: "Назад",
@@ -201,9 +201,8 @@
 
     els.resetButton.addEventListener("click", function () {
       playClick();
-      if (window.confirm(tx("resetConfirm"))) {
+      if (window.confirm(tx("restartConfirm"))) {
         clearProgress();
-        localStorage.removeItem(STORAGE_HISTORY);
         renderTitleScreen();
       }
     });
@@ -222,8 +221,16 @@
   function revealTitleAfterLang() {
     els.titleReveal.hidden = false;
     els.subtitleText.textContent = t(game.ui.subtitle);
-    els.startButton.textContent = loadJSON(STORAGE_PROGRESS) ? tx("continueButton") : t(game.ui.startButton);
-    els.resetButton.textContent = tx("resetProgress");
+
+    var progress = loadJSON(STORAGE_PROGRESS);
+    if (progress) {
+      els.startButton.textContent = format(tx("continueButtonDay"), { n: progress.dayIndex + 1, total: game.days.length });
+      els.resetButton.textContent = tx("restartLink");
+      els.resetButton.hidden = false;
+    } else {
+      els.startButton.textContent = t(game.ui.startButton);
+      els.resetButton.hidden = true;
+    }
 
     var matchHistory = loadJSON(STORAGE_HISTORY) || [];
     if (matchHistory.length) {
