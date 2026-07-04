@@ -16,7 +16,7 @@
 
     if (boevoyDukh > 150 && prodvizhenie > 150) return "reabilitation";
     if (boevoyDukh > 100 && prodvizhenie < 30) return "good-person";
-    if (boevoyDukh < -30 && prodvizhenie > 120) return "results-no-friends";
+    if (boevoyDukh < 0 && prodvizhenie > 80) return "results-no-friends";
     if (boevoyDukh > 50 && prodvizhenie > 80) return "strong-leader";
     if (boevoyDukh < -50 && prodvizhenie < 20) return "rainy-season";
 
