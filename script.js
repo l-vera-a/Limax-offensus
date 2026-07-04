@@ -10,13 +10,18 @@
       continueButtonDay: "Продолжить экспедицию (День {n} из {total})",
       restartLink: "Начать заново",
       restartConfirm: "Текущий прогресс партии будет стёрт. Начать заново?",
+      clearHistoryLink: "Очистить историю",
+      clearHistoryConfirm: "Статистика сыгранных партий будет стёрта без возможности восстановления. Очистить?",
       playedCount: "Сыграно партий: ",
       bestEnding: ". Лучшая концовка: ",
       journalBack: "Закрыть журнал",
       journalHeading: "Журнал экспедиции",
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
-      workedTag: "сработало",
+      luckTagLabel: "Повезло",
+      workedTag: "Сработало",
+      failedTag: "Не сработало",
+      ambiguousTag: "Неоднозначно",
       failedDayLabel: "День {n} — провал экспедиции",
       dayLabel: "День {n}",
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
@@ -34,13 +39,18 @@
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
       restartLink: "Почати заново",
       restartConfirm: "Поточний прогрес партії буде стерто. Почати заново?",
+      clearHistoryLink: "Очистити історію",
+      clearHistoryConfirm: "Статистику зіграних партій буде стерто без можливості відновлення. Очистити?",
       playedCount: "Зіграно партій: ",
       bestEnding: ". Найкраща кінцівка: ",
       journalBack: "Закрити журнал",
       journalHeading: "Журнал експедиції",
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
-      workedTag: "спрацювало",
+      luckTagLabel: "Пощастило",
+      workedTag: "Спрацювало",
+      failedTag: "Не спрацювало",
+      ambiguousTag: "Неоднозначно",
       failedDayLabel: "День {n} — провал експедиції",
       dayLabel: "День {n}",
       downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
@@ -104,13 +114,13 @@
     [
       "mute-toggle",
       "screen-title", "latin-title", "lang-switch", "title-reveal", "subtitle-text",
-      "played-count-line", "start-button", "reset-button",
+      "played-count-line", "clear-history-button", "start-button", "reset-button",
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
       "screen-team", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
-      "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note",
+      "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note", "luck-explanation",
       "outcome-artifact-name", "outcome-artifact-note", "next-button",
       "screen-final", "final-image", "final-reveal", "final-emoji", "final-title", "final-text",
       "final-bd-value", "final-prod-value",
@@ -158,6 +168,10 @@
 
   function clearProgress() {
     localStorage.removeItem(STORAGE_PROGRESS);
+  }
+
+  function clearHistory() {
+    localStorage.removeItem(STORAGE_HISTORY);
   }
 
   function pushMatchHistory(record) {
@@ -223,6 +237,14 @@
         renderTitleScreen();
       }
     });
+
+    els.clearHistoryButton.addEventListener("click", function () {
+      playClick();
+      if (window.confirm(tx("clearHistoryConfirm"))) {
+        clearHistory();
+        renderTitleScreen();
+      }
+    });
   }
 
   function setLang(lang) {
@@ -257,8 +279,11 @@
       var bestEnding = findEnding(best.endingId);
       els.playedCountLine.textContent = tx("playedCount") + matchHistory.length +
         (bestEnding ? tx("bestEnding") + t(bestEnding.title) : "");
+      els.clearHistoryButton.textContent = tx("clearHistoryLink");
+      els.clearHistoryButton.hidden = false;
     } else {
       els.playedCountLine.textContent = "";
+      els.clearHistoryButton.hidden = true;
     }
   }
 
@@ -427,7 +452,6 @@
     state.prodvizhenie += outcome.prodvizhenie;
     state.history.push({
       day: day.day,
-      dayTitle: day.title,
       dayPrinciple: day.principle,
       daySituation: day.situation,
       dayArtifact: day.artifact,
@@ -438,6 +462,7 @@
       boevoyDukh: outcome.boevoyDukh,
       prodvizhenie: outcome.prodvizhenie,
       luck: !!outcome.luck,
+      luckNote: outcome.luckNote,
       fail: !!outcome.fail
     });
     state.failed = !!outcome.fail;
@@ -457,6 +482,9 @@
     els.luckNote.hidden = !outcome.luck;
     if (outcome.luck) els.luckNote.textContent = "🍀 " + t(game.ui.luckTag);
 
+    els.luckExplanation.hidden = !outcome.luck || !outcome.luckNote;
+    if (outcome.luck && outcome.luckNote) els.luckExplanation.textContent = t(outcome.luckNote);
+
     setStatDisplay(els.statBdValue, state.boevoyDukh, true);
     setStatDisplay(els.statProdValue, state.prodvizhenie, true);
 
@@ -473,6 +501,13 @@
     el.textContent = (value > 0 ? "+" : "") + value;
     el.classList.remove("delta-up", "delta-down", "delta-zero");
     el.classList.add(value > 0 ? "delta-up" : value < 0 ? "delta-down" : "delta-zero");
+  }
+
+  function journalTagState(entry) {
+    if (entry.luck) return "luck";
+    if (entry.boevoyDukh >= 0 && entry.prodvizhenie >= 0) return "worked";
+    if (entry.boevoyDukh <= 0 && entry.prodvizhenie <= 0) return "failed";
+    return "ambiguous";
   }
 
   function bindNextButton() {
@@ -557,9 +592,13 @@
         ? format(tx("failedDayLabel"), { n: entry.day })
         : format(tx("dayLabel"), { n: entry.day });
 
-      var luckTag = entry.luck
-        ? "🍀 " + t(game.ui.luckTag)
-        : "✅ " + tx("workedTag");
+      var tagState = journalTagState(entry);
+      var tagContent = {
+        luck: { emoji: "🍀", text: tx("luckTagLabel") },
+        worked: { emoji: "✅", text: tx("workedTag") },
+        failed: { emoji: "❌", text: tx("failedTag") },
+        ambiguous: { emoji: "➖", text: tx("ambiguousTag") }
+      }[tagState];
 
       item.innerHTML =
         '<h3 class="journal-day"></h3>' +
@@ -578,19 +617,29 @@
         '</span>' +
         '<span class="journal-tag"></span>' +
         '</div>' +
+        '<p class="journal-luck-note" hidden></p>' +
         '<div class="journal-artifact">' +
         '<p class="journal-artifact-name"></p>' +
         '<p class="journal-artifact-note"></p>' +
         '</div>';
 
-      item.querySelector(".journal-day").textContent = dayLabel + " — " + t(entry.dayTitle);
+      item.querySelector(".journal-day").textContent = dayLabel;
       item.querySelector(".journal-principle").textContent = t(entry.dayPrinciple);
       item.querySelector(".journal-situation").textContent = t(entry.daySituation);
       item.querySelector(".journal-artifact-name").textContent = tx("artifactLabel") + ": " + t(entry.dayArtifact);
       item.querySelector(".journal-artifact-note").textContent = t(entry.dayArtifactNote);
       item.querySelector(".journal-option").textContent = t(entry.optionText);
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
-      item.querySelector(".journal-deltas .journal-tag").textContent = luckTag;
+
+      var tagEl = item.querySelector(".journal-deltas .journal-tag");
+      tagEl.textContent = tagContent.emoji + " " + tagContent.text;
+      tagEl.className = "journal-tag tag-" + tagState;
+
+      var luckNoteEl = item.querySelector(".journal-luck-note");
+      if (tagState === "luck" && entry.luckNote) {
+        luckNoteEl.textContent = t(entry.luckNote);
+        luckNoteEl.hidden = false;
+      }
 
       var deltaLabels = item.querySelectorAll(".journal-deltas .delta-label");
       deltaLabels[0].textContent = tx("statBdLabel");

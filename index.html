@@ -27,7 +27,10 @@
 
       <div id="title-reveal" hidden>
         <h2 id="subtitle-text"></h2>
-        <p id="played-count-line"></p>
+        <div class="title-stats">
+          <p id="played-count-line"></p>
+          <button id="clear-history-button" class="btn btn-text" type="button" hidden></button>
+        </div>
         <button id="start-button" class="btn btn-primary" type="button"></button>
         <button id="reset-button" class="btn btn-text" type="button"></button>
       </div>
@@ -103,6 +106,7 @@
           </span>
         </div>
         <p id="luck-note" class="handwritten" hidden></p>
+        <p id="luck-explanation" class="luck-explanation" hidden></p>
         <div id="outcome-artifact" class="outcome-artifact">
           <p id="outcome-artifact-name" class="outcome-artifact-name"></p>
           <p id="outcome-artifact-note" class="outcome-artifact-note"></p>

@@ -315,12 +315,20 @@ p {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+.title-stats {
+  margin-bottom: 1.25rem;
+}
+
 #played-count-line {
   font-family: var(--font-mono);
   font-size: 0.85rem;
   opacity: 0.85;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.35rem;
   min-height: 1.2em;
+}
+
+#clear-history-button {
+  margin-bottom: 0;
 }
 
 #title-reveal .btn-primary {
@@ -628,7 +636,14 @@ p {
 .delta-zero { color: var(--color-ink-soft); }
 
 #luck-note {
-  margin-bottom: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.luck-explanation {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin: 0 0 1rem;
 }
 
 .outcome-artifact {
@@ -779,6 +794,17 @@ p {
   font-family: var(--font-hand);
   font-size: 1.1rem;
   color: var(--color-ink);
+}
+
+.journal-tag.tag-worked { color: var(--color-good); }
+.journal-tag.tag-failed { color: var(--color-bad); }
+.journal-tag.tag-ambiguous { color: var(--color-ink-soft); }
+
+.journal-luck-note {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  margin: 0.5rem 0 0;
 }
 
 .journal-artifact {
