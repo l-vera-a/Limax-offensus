@@ -476,6 +476,9 @@ p {
   justify-content: space-between;
   gap: 0.5rem;
   padding: calc(0.6rem + env(safe-area-inset-top)) 1rem 0.6rem;
+  /* Место под #mute-toggle (fixed, справа сверху) — иначе укрупнённая
+     подпись показателя "Прогресс" залезает под кнопку звука. */
+  padding-right: calc(1rem + var(--touch-min) + 0.5rem + env(safe-area-inset-right));
   background: rgba(239, 228, 200, 0.92);
   backdrop-filter: blur(4px);
   border-bottom: 1px solid rgba(46, 32, 22, 0.15);
@@ -484,32 +487,72 @@ p {
 .stat-badge {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   font-family: var(--font-mono);
   font-size: 1.1rem;
   min-width: 0;
 }
 
 .stat-icon {
-  width: 26px;
-  height: 26px;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
 }
 
-.stat-value {
-  min-width: 2.5ch;
-  text-align: center;
+.stat-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  min-width: 0;
 }
 
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
+}
+
+.stat-value {
+  text-align: left;
+  font-size: 1.15rem;
+}
+
+/*
+ * Календарный листок для счётчика дня — крупное число + подпись «из N»,
+ * бумажная плашка вместо голой строки текста.
+ */
 .day-counter {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  padding: 0.3rem 0.25rem 0.4rem;
+  background-color: var(--color-card-bg);
+  background-image: url("assets/img/paper-texture.jpg");
+  background-size: cover;
+  background-blend-mode: multiply;
+  border: 1px solid rgba(46, 32, 22, 0.25);
+  border-radius: 4px;
+  box-shadow: var(--shadow-soft);
+  transform: rotate(-1.5deg);
+}
+
+.day-counter-number {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.day-counter-total {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
   color: var(--color-ink-soft);
   white-space: nowrap;
-}
-
-.day-inner #day-title {
-  font-size: 1.6rem;
 }
 
 #day-options {
@@ -644,6 +687,16 @@ p {
   margin-bottom: 0.35rem;
 }
 
+.journal-entry .journal-principle {
+  margin-bottom: 0.5rem;
+}
+
+.journal-entry .journal-situation {
+  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.75rem;
+}
+
 .journal-entry .journal-option {
   font-style: italic;
   color: var(--color-ink-soft);
@@ -665,6 +718,26 @@ p {
   font-family: var(--font-hand);
   font-size: 1.1rem;
   color: var(--color-ink);
+}
+
+.journal-artifact {
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(46, 32, 22, 0.25);
+}
+
+.journal-artifact-name {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.25rem;
+}
+
+.journal-artifact-note {
+  font-size: 0.95rem;
+  margin-bottom: 0;
 }
 
 /* ==========================================================================

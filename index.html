@@ -68,19 +68,20 @@
     <header class="stats-header">
       <div class="stat-badge">
         <img src="assets/img/icon-boevoy-dukh.png" alt="" class="stat-icon">
-        <span id="stat-bd-value" class="stat-value">0</span>
+        <span class="stat-text"><span id="stat-bd-label" class="stat-label"></span> <span id="stat-bd-value" class="stat-value">0</span></span>
       </div>
-      <div id="day-counter" class="day-counter"></div>
+      <div id="day-counter" class="day-counter">
+        <span id="day-counter-number" class="day-counter-number"></span>
+        <span id="day-counter-total" class="day-counter-total"></span>
+      </div>
       <div class="stat-badge">
         <img src="assets/img/icon-prodvizhenie.png" alt="" class="stat-icon">
-        <span id="stat-prod-value" class="stat-value">0</span>
+        <span class="stat-text"><span id="stat-prod-label" class="stat-label"></span> <span id="stat-prod-value" class="stat-value">0</span></span>
       </div>
     </header>
 
     <div class="screen-inner day-inner">
       <img id="day-scene" class="scene-img" src="" alt="" loading="lazy">
-      <h2 id="day-title"></h2>
-      <p id="day-principle" class="handwritten"></p>
 
       <div id="day-body">
         <p id="day-situation" class="body-text"></p>
