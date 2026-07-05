@@ -387,6 +387,7 @@ p {
 #team-heading {
   /* Место под #mute-toggle (fixed, справа сверху), как у .stats-header/.journal-top. */
   padding-right: calc(var(--touch-min) + 0.5rem + env(safe-area-inset-right));
+  text-align: center;
 }
 
 .team-carousel {
@@ -924,6 +925,13 @@ p {
 
   .screen-inner {
     padding: 2.5rem 2rem 3rem;
+  }
+
+  #team-heading {
+    /* На этой ширине есть достаточный запас до #mute-toggle без
+       резервирования места под него — центр заголовка совпадает
+       с центром карусели под ним. */
+    padding-right: 0;
   }
 
   #screen-mission .screen-inner {
