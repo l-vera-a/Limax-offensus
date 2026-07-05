@@ -20,6 +20,8 @@
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
       luckTagLabel: "Повезло",
+      luckBadTagLabel: "Не повезло",
+      luckMixedTagLabel: "Неожиданно",
       workedTag: "Сработало",
       failedTag: "Не сработало",
       ambiguousTag: "Неоднозначно",
@@ -51,6 +53,8 @@
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
       luckTagLabel: "Пощастило",
+      luckBadTagLabel: "Не пощастило",
+      luckMixedTagLabel: "Неочікувано",
       workedTag: "Спрацювало",
       failedTag: "Не спрацювало",
       ambiguousTag: "Неоднозначно",
@@ -486,7 +490,7 @@
     els.outcomeArtifactNote.textContent = t(day.artifactNote);
 
     els.luckNote.hidden = !outcome.luck;
-    if (outcome.luck) els.luckNote.textContent = "🍀 " + t(game.ui.luckTag);
+    if (outcome.luck) els.luckNote.textContent = "🍀 " + luckTagText(outcome.boevoyDukh, outcome.prodvizhenie);
 
     els.luckExplanation.hidden = !outcome.luck || !outcome.luckNote;
     if (outcome.luck && outcome.luckNote) els.luckExplanation.textContent = t(outcome.luckNote);
@@ -514,6 +518,12 @@
     if (entry.boevoyDukh >= 0 && entry.prodvizhenie >= 0) return "worked";
     if (entry.boevoyDukh <= 0 && entry.prodvizhenie <= 0) return "failed";
     return "ambiguous";
+  }
+
+  function luckTagText(boevoyDukh, prodvizhenie) {
+    if (boevoyDukh >= 0 && prodvizhenie >= 0) return tx("luckTagLabel");
+    if (boevoyDukh <= 0 && prodvizhenie <= 0) return tx("luckBadTagLabel");
+    return tx("luckMixedTagLabel");
   }
 
   function bindNextButton() {
@@ -600,7 +610,7 @@
 
       var tagState = journalTagState(entry);
       var tagContent = {
-        luck: { emoji: "🍀", text: tx("luckTagLabel") },
+        luck: { emoji: "🍀", text: luckTagText(entry.boevoyDukh, entry.prodvizhenie) },
         worked: { emoji: "✅", text: tx("workedTag") },
         failed: { emoji: "❌", text: tx("failedTag") },
         ambiguous: { emoji: "➖", text: tx("ambiguousTag") }
