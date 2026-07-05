@@ -850,9 +850,7 @@ p {
 }
 
 .journal-diagnosis {
-  margin: 0.75rem 0 0.5rem;
-  padding-top: 0.6rem;
-  border-top: 1px dashed rgba(46, 32, 22, 0.25);
+  margin-top: 0.6rem;
 }
 
 .journal-diagnosis-label {
@@ -873,6 +871,22 @@ p {
   margin-top: 0.75rem;
   padding-top: 0.6rem;
   border-top: 1px dashed rgba(46, 32, 22, 0.25);
+}
+
+.journal-theory {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid rgba(46, 32, 22, 0.25);
+}
+
+.journal-theory-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.6rem;
 }
 
 .journal-artifact-name {

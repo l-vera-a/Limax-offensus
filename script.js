@@ -38,7 +38,8 @@
       statProdLabel: "Прогресс",
       dayOfTotal: "из {total}",
       artifactLabel: "Артефакт дня",
-      diagnosisLabel: "Разбор"
+      diagnosisLabel: "Разбор",
+      theoryDivider: "Теория дня"
     },
     uk: {
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
@@ -72,7 +73,8 @@
       statProdLabel: "Прогрес",
       dayOfTotal: "з {total}",
       artifactLabel: "Артефакт дня",
-      diagnosisLabel: "Розбір"
+      diagnosisLabel: "Розбір",
+      theoryDivider: "Теорія дня"
     }
   };
 
@@ -637,14 +639,17 @@
         '<span class="journal-tag"></span>' +
         '</div>' +
         '<p class="journal-luck-note" hidden></p>' +
+        '<div class="journal-artifact">' +
+        '<p class="journal-artifact-name"></p>' +
+        '<p class="journal-artifact-note"></p>' +
+        '</div>' +
+        '<div class="journal-theory">' +
+        '<p class="journal-theory-label"></p>' +
+        '<p class="journal-principle handwritten"></p>' +
         '<div class="journal-diagnosis">' +
         '<p class="journal-diagnosis-label"></p>' +
         '<p class="journal-diagnosis-text"></p>' +
         '</div>' +
-        '<p class="journal-principle handwritten"></p>' +
-        '<div class="journal-artifact">' +
-        '<p class="journal-artifact-name"></p>' +
-        '<p class="journal-artifact-note"></p>' +
         '</div>';
 
       item.querySelector(".journal-day").textContent = dayLabel;
@@ -656,6 +661,7 @@
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
       item.querySelector(".journal-diagnosis-label").textContent = tx("diagnosisLabel");
       item.querySelector(".journal-diagnosis-text").textContent = t(entry.optionDiagnosis);
+      item.querySelector(".journal-theory-label").textContent = tx("theoryDivider");
 
       var tagEl = item.querySelector(".journal-deltas .journal-tag");
       tagEl.textContent = tagContent.emoji + " " + tagContent.text;
