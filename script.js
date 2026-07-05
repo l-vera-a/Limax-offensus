@@ -25,6 +25,7 @@
       workedTag: "Сработало",
       failedTag: "Не сработало",
       ambiguousTag: "Неоднозначно",
+      neutralTag: "Без изменений",
       failedDayLabel: "День {n} — провал экспедиции",
       dayLabel: "День {n}",
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
@@ -58,6 +59,7 @@
       workedTag: "Спрацювало",
       failedTag: "Не спрацювало",
       ambiguousTag: "Неоднозначно",
+      neutralTag: "Без змін",
       failedDayLabel: "День {n} — провал експедиції",
       dayLabel: "День {n}",
       downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
@@ -515,6 +517,7 @@
 
   function journalTagState(entry) {
     if (entry.luck) return "luck";
+    if (entry.boevoyDukh === 0 && entry.prodvizhenie === 0) return "neutral";
     if (entry.boevoyDukh >= 0 && entry.prodvizhenie >= 0) return "worked";
     if (entry.boevoyDukh <= 0 && entry.prodvizhenie <= 0) return "failed";
     return "ambiguous";
@@ -613,7 +616,8 @@
         luck: { emoji: "🍀", text: luckTagText(entry.boevoyDukh, entry.prodvizhenie) },
         worked: { emoji: "✅", text: tx("workedTag") },
         failed: { emoji: "❌", text: tx("failedTag") },
-        ambiguous: { emoji: "➖", text: tx("ambiguousTag") }
+        ambiguous: { emoji: "➖", text: tx("ambiguousTag") },
+        neutral: { emoji: "🟰", text: tx("neutralTag") }
       }[tagState];
 
       item.innerHTML =
