@@ -665,6 +665,11 @@
     els.journalCounter.setAttribute("aria-label", format(tx("journalPageLabel"), { n: state.journalIndex + 1, total: total }));
     els.journalPrev.disabled = state.journalIndex === 0;
     els.journalNext.disabled = state.journalIndex === total - 1;
+
+    // Высота вьюпорта — под текущую запись, а не автовысота флекс-ряда
+    // (ненадёжна в некоторых браузерах при overflow:hidden + transform).
+    var activeEntry = els.journalTrack.children[state.journalIndex];
+    if (activeEntry) els.journalViewport.style.height = activeEntry.scrollHeight + "px";
   }
 
   function goToJournalSlide(index) {
@@ -703,6 +708,12 @@
     });
     els.journalViewport.addEventListener("pointercancel", function () {
       dragging = false;
+    });
+
+    // Ширина экрана меняется (поворот устройства, ресайз) — текст в записи
+    // переливается на другую высоту, пересчитываем высоту вьюпорта.
+    window.addEventListener("resize", function () {
+      if (!els.screenJournal.hidden) updateJournalCarousel();
     });
   }
 

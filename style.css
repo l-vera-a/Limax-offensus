@@ -758,6 +758,10 @@ p {
   min-width: 0;
   overflow: hidden;
   touch-action: pan-y;
+  /* Высота задаётся из JS под текущую запись (updateJournalCarousel) —
+     не полагаемся на автовысоту флекс-контейнера с overflow:hidden и
+     transform внутри, это ненадёжно в некоторых браузерах. */
+  transition: height 0.3s ease;
 }
 
 /* На мобильном свайп есть, но без видимых стрелок это не читается как
@@ -774,6 +778,7 @@ p {
 
 #journal-track {
   display: flex;
+  align-items: flex-start;
   transition: transform 0.3s ease;
 }
 
