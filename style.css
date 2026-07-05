@@ -735,19 +735,42 @@ p {
   margin-bottom: 0;
 }
 
+/* Счётчик страницы в журнале — тот же .day-counter, но заметнее: акцентная
+   рамка вместо еле видной, чтобы на мобильном читалось как «есть ещё
+   страницы», а не терялось в углу. */
+#journal-counter {
+  border: 2px solid var(--color-accent);
+  box-shadow: 0 4px 14px rgba(40, 26, 10, 0.3);
+}
+
 .journal-carousel {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .journal-viewport {
-  flex: 1 1 auto;
+  flex: 1 1 100%;
+  order: 2;
   min-width: 0;
   overflow: hidden;
   touch-action: pan-y;
 }
+
+/* На мобильном свайп есть, но без видимых стрелок это не читается как
+   карусель — показываем стрелки всегда (не только на десктопе, как у
+   карусели команды), сразу над записью (видно без скролла длинной
+   записи), по бокам от неё — на широком экране. */
+#journal-prev,
+#journal-next {
+  display: flex;
+}
+
+#journal-prev { order: 0; }
+#journal-next { order: 1; }
 
 #journal-track {
   display: flex;
@@ -843,6 +866,20 @@ p {
 
   .carousel-arrow {
     display: flex;
+  }
+
+  .journal-carousel {
+    flex-wrap: nowrap;
+  }
+
+  .journal-viewport {
+    flex: 1 1 auto;
+    order: 0;
+  }
+
+  #journal-prev,
+  #journal-next {
+    order: 0;
   }
 
   #day-options {
