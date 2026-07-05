@@ -34,7 +34,8 @@
       statBdLabel: "Дух",
       statProdLabel: "Прогресс",
       dayOfTotal: "из {total}",
-      artifactLabel: "Артефакт дня"
+      artifactLabel: "Артефакт дня",
+      diagnosisLabel: "Разбор"
     },
     uk: {
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
@@ -64,7 +65,8 @@
       statBdLabel: "Дух",
       statProdLabel: "Прогрес",
       dayOfTotal: "з {total}",
-      artifactLabel: "Артефакт дня"
+      artifactLabel: "Артефакт дня",
+      diagnosisLabel: "Розбір"
     }
   };
 
@@ -461,6 +463,7 @@
       dayArtifactNote: day.artifactNote,
       optionId: option.id,
       optionText: option.text,
+      optionDiagnosis: option.diagnosis,
       outcomeText: outcome.text,
       boevoyDukh: outcome.boevoyDukh,
       prodvizhenie: outcome.prodvizhenie,
@@ -605,7 +608,6 @@
 
       item.innerHTML =
         '<h3 class="journal-day"></h3>' +
-        '<p class="journal-principle handwritten"></p>' +
         '<p class="journal-situation body-text"></p>' +
         '<p class="journal-option"></p>' +
         '<p class="journal-outcome"></p>' +
@@ -621,6 +623,11 @@
         '<span class="journal-tag"></span>' +
         '</div>' +
         '<p class="journal-luck-note" hidden></p>' +
+        '<div class="journal-diagnosis">' +
+        '<p class="journal-diagnosis-label"></p>' +
+        '<p class="journal-diagnosis-text"></p>' +
+        '</div>' +
+        '<p class="journal-principle handwritten"></p>' +
         '<div class="journal-artifact">' +
         '<p class="journal-artifact-name"></p>' +
         '<p class="journal-artifact-note"></p>' +
@@ -633,6 +640,8 @@
       item.querySelector(".journal-artifact-note").textContent = t(entry.dayArtifactNote);
       item.querySelector(".journal-option").textContent = t(entry.optionText);
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
+      item.querySelector(".journal-diagnosis-label").textContent = tx("diagnosisLabel");
+      item.querySelector(".journal-diagnosis-text").textContent = t(entry.optionDiagnosis);
 
       var tagEl = item.querySelector(".journal-deltas .journal-tag");
       tagEl.textContent = tagContent.emoji + " " + tagContent.text;

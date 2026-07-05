@@ -849,6 +849,26 @@ p {
   margin: 0.5rem 0 0;
 }
 
+.journal-diagnosis {
+  margin: 0.75rem 0 0.5rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(46, 32, 22, 0.25);
+}
+
+.journal-diagnosis-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.25rem;
+}
+
+.journal-diagnosis-text {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
 .journal-artifact {
   margin-top: 0.75rem;
   padding-top: 0.6rem;
