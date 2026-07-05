@@ -16,6 +16,7 @@
       bestEnding: ". Лучшая концовка: ",
       journalBack: "Закрыть журнал",
       journalHeading: "Журнал экспедиции",
+      teamHeading: "Познакомьтесь с командой",
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
       luckTagLabel: "Повезло",
@@ -45,6 +46,7 @@
       bestEnding: ". Найкраща кінцівка: ",
       journalBack: "Закрити журнал",
       journalHeading: "Журнал експедиції",
+      teamHeading: "Познайомтеся з командою",
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
       luckTagLabel: "Пощастило",
@@ -116,7 +118,7 @@
       "screen-title", "latin-title", "lang-switch", "title-reveal", "subtitle-text",
       "played-count-line", "clear-history-button", "start-button", "reset-button",
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
-      "screen-team", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
+      "screen-team", "team-heading", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
@@ -319,6 +321,7 @@
   // ---------------------------------------------------------------------
 
   function renderTeamScreen() {
+    els.teamHeading.textContent = tx("teamHeading");
     state.teamIndex = 0;
     els.teamTrack.innerHTML = "";
     els.teamDots.innerHTML = "";
@@ -665,6 +668,11 @@
     els.journalCounter.setAttribute("aria-label", format(tx("journalPageLabel"), { n: state.journalIndex + 1, total: total }));
     els.journalPrev.disabled = state.journalIndex === 0;
     els.journalNext.disabled = state.journalIndex === total - 1;
+
+    // Высота вьюпорта — под текущую запись, а не автовысота флекс-ряда
+    // (ненадёжна в некоторых браузерах при overflow:hidden + transform).
+    var activeEntry = els.journalTrack.children[state.journalIndex];
+    if (activeEntry) els.journalViewport.style.height = activeEntry.scrollHeight + "px";
   }
 
   function goToJournalSlide(index) {
@@ -703,6 +711,12 @@
     });
     els.journalViewport.addEventListener("pointercancel", function () {
       dragging = false;
+    });
+
+    // Ширина экрана меняется (поворот устройства, ресайз) — текст в записи
+    // переливается на другую высоту, пересчитываем высоту вьюпорта.
+    window.addEventListener("resize", function () {
+      if (!els.screenJournal.hidden) updateJournalCarousel();
     });
   }
 
