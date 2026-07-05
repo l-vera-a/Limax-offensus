@@ -351,8 +351,20 @@ p {
    2. Миссия
    ========================================================================== */
 
+#screen-mission .screen-inner {
+  padding-top: 1.25rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+}
+
 #mission-sketch {
-  max-width: 220px;
+  max-width: 150px;
+  margin-bottom: 0.75rem;
+}
+
+#screen-mission .paper-panel,
+#screen-mission .disclaimer-sticker {
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 0.75rem;
 }
 
 .disclaimer-sticker {
@@ -912,6 +924,11 @@ p {
 
   .screen-inner {
     padding: 2.5rem 2rem 3rem;
+  }
+
+  #screen-mission .screen-inner {
+    padding-top: 1.75rem;
+    padding-bottom: calc(1.75rem + env(safe-area-inset-bottom));
   }
 
   .carousel-arrow {
