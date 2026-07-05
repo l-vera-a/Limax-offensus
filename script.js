@@ -16,6 +16,7 @@
       bestEnding: ". Лучшая концовка: ",
       journalBack: "Закрыть журнал",
       journalHeading: "Журнал экспедиции",
+      teamHeading: "Познакомьтесь с командой",
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
       luckTagLabel: "Повезло",
@@ -45,6 +46,7 @@
       bestEnding: ". Найкраща кінцівка: ",
       journalBack: "Закрити журнал",
       journalHeading: "Журнал експедиції",
+      teamHeading: "Познайомтеся з командою",
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
       luckTagLabel: "Пощастило",
@@ -116,7 +118,7 @@
       "screen-title", "latin-title", "lang-switch", "title-reveal", "subtitle-text",
       "played-count-line", "clear-history-button", "start-button", "reset-button",
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
-      "screen-team", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
+      "screen-team", "team-heading", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
       "day-counter", "day-counter-number", "day-counter-total", "day-scene",
       "day-body", "day-situation", "day-options",
@@ -319,6 +321,7 @@
   // ---------------------------------------------------------------------
 
   function renderTeamScreen() {
+    els.teamHeading.textContent = tx("teamHeading");
     state.teamIndex = 0;
     els.teamTrack.innerHTML = "";
     els.teamDots.innerHTML = "";

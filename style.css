@@ -372,6 +372,11 @@ p {
    3. Команда
    ========================================================================== */
 
+#team-heading {
+  /* Место под #mute-toggle (fixed, справа сверху), как у .stats-header/.journal-top. */
+  padding-right: calc(var(--touch-min) + 0.5rem + env(safe-area-inset-right));
+}
+
 .team-carousel {
   position: relative;
   display: flex;
