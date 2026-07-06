@@ -435,7 +435,10 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "option-button";
-      btn.textContent = t(option.text);
+      var btnText = document.createElement("span");
+      btnText.className = "option-button-text";
+      btnText.textContent = t(option.text);
+      btn.appendChild(btnText);
       btn.addEventListener("click", function () {
         playClick();
         chooseOption(day, option);
