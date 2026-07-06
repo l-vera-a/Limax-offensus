@@ -157,7 +157,7 @@ p {
   /* Картинка не должна диктовать высоту экрана — на невысоких окнах
      (типичный ноутбук) кадрирование через object-fit: cover сохраняет
      пропорции, оставляя место под текст и варианты без скролла. */
-  max-height: 34vh;
+  max-height: 28vh;
   object-fit: cover;
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-soft);
@@ -592,25 +592,29 @@ p {
 }
 
 #screen-day .screen-inner {
-  padding-top: 1rem;
-  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  padding-top: 0.75rem;
+  padding-bottom: calc(1.1rem + env(safe-area-inset-bottom));
 }
 
 #day-body,
 #outcome-body {
-  padding: 0.9rem 1.1rem;
-  margin-bottom: 0.85rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.65rem;
+}
+
+#day-situation {
+  margin-bottom: 0.6rem;
 }
 
 #day-options {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .option-button {
   min-height: 56px;
-  padding: 0.85rem 1.1rem;
+  padding: 0.65rem 1rem;
   text-align: left;
   background: var(--color-card-bg);
   background-image: url("assets/img/paper-texture.jpg");
