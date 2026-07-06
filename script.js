@@ -130,7 +130,7 @@
       "screen-mission", "mission-text", "disclaimer-text", "meet-team-button",
       "screen-team", "team-heading", "team-viewport", "team-track", "team-prev", "team-next", "team-dots", "go-button",
       "screen-day", "stat-bd-label", "stat-bd-value", "stat-prod-label", "stat-prod-value",
-      "day-counter", "day-counter-number", "day-counter-total", "day-scene",
+      "day-counter", "day-counter-number", "day-counter-total", "day-scene", "day-scene-wide",
       "day-body", "day-situation", "day-options",
       "outcome-body", "outcome-text", "delta-bd", "delta-bd-label", "delta-prod", "delta-prod-label", "luck-note", "luck-explanation",
       "outcome-artifact-name", "outcome-artifact-note", "next-button",
@@ -421,6 +421,8 @@
     els.dayCounter.setAttribute("aria-label", format(t(game.ui.dayCounter), { n: day.day }));
     els.dayScene.src = day.scene;
     els.dayScene.alt = t(day.title);
+    els.daySceneWide.src = day.scene;
+    els.daySceneWide.alt = t(day.title);
     els.daySituation.textContent = t(day.situation);
 
     els.statBdLabel.textContent = tx("statBdLabel");
@@ -435,7 +437,10 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "option-button";
-      btn.textContent = t(option.text);
+      var btnText = document.createElement("span");
+      btnText.className = "option-button-text";
+      btnText.textContent = t(option.text);
+      btn.appendChild(btnText);
       btn.addEventListener("click", function () {
         playClick();
         chooseOption(day, option);
