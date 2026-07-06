@@ -1011,4 +1011,37 @@ p {
   #latin-title {
     font-size: 5rem;
   }
+
+  /*
+   * На широких, но невысоких экранах (ноутбуки) картинка сцены и текст
+   * встают в две колонки — высоту колонки задаёт содержимое текстовой
+   * колонки (day-content), а не vh, поэтому скролла от разросшейся
+   * картинки больше не бывает в принципе.
+   */
+  .day-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 38%) 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .day-layout .scene-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    max-height: none;
+    margin-bottom: 0;
+  }
+
+  .day-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .day-content #day-body,
+  .day-content #outcome-body {
+    margin-bottom: 0;
+  }
 }
