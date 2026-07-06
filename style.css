@@ -1130,7 +1130,9 @@ p {
     display: grid;
     grid-template-columns: minmax(280px, 45%) 1fr;
     gap: 1.5rem;
-    align-items: start;
+    /* Текст ситуации обычно короче картинки — center, а не start,
+       чтобы он не был прижат к верху с пустым местом под собой. */
+    align-items: center;
     margin-bottom: 1rem;
   }
 
