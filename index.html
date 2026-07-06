@@ -85,17 +85,20 @@
     </header>
 
     <div class="screen-inner day-inner">
-      <div class="day-layout">
-        <img id="day-scene" class="scene-img" src="" alt="" loading="lazy">
+      <img id="day-scene" class="scene-img" src="" alt="" loading="lazy">
 
-        <div class="day-content">
-          <div id="day-body">
-            <p id="day-situation" class="body-text"></p>
-            <div id="day-options"></div>
-          </div>
+      <div id="day-body">
+        <div class="day-lower">
+          <p id="day-situation" class="body-text"></p>
+          <div id="day-options"></div>
+        </div>
+      </div>
 
-          <div id="outcome-body" hidden>
-            <p id="outcome-text" class="body-text"></p>
+      <div id="outcome-body" hidden>
+        <div class="day-lower">
+          <p id="outcome-text" class="body-text"></p>
+
+          <div class="outcome-side">
             <div class="stat-deltas">
               <span class="delta-item">
                 <img src="assets/img/icon-boevoy-dukh.png" alt="" class="delta-icon">

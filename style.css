@@ -155,13 +155,28 @@ p {
   width: 100%;
   aspect-ratio: 16 / 9;
   /* Картинка не должна диктовать высоту экрана — на невысоких окнах
-     (типичный ноутбук) кадрирование через object-fit: cover сохраняет
-     пропорции, оставляя место под текст и варианты без скролла. */
+     (типичный ноутбук) ограничение по высоте оставляет место под текст
+     и варианты без скролла. */
   max-height: 28vh;
   object-fit: cover;
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-soft);
   margin-bottom: 0.85rem;
+}
+
+/*
+ * Экран дня/исхода: сцена широкоформатная, персонажи расставлены в ряд
+ * по горизонтали. object-fit: cover при ограниченной высоте обрезает их
+ * по краям — здесь показываем картинку целиком (contain), а пустые поля
+ * закрашиваем в тон бумаги (не белым/чёрным), чтобы не выглядело как
+ * баг рендеринга.
+ */
+#screen-day .scene-img {
+  object-fit: contain;
+  background-color: var(--color-card-bg);
+  background-image: url("assets/img/paper-texture.jpg");
+  background-size: cover;
+  background-blend-mode: multiply;
 }
 
 /* ==========================================================================
@@ -1013,35 +1028,19 @@ p {
   }
 
   /*
-   * На широких, но невысоких экранах (ноутбуки) картинка сцены и текст
-   * встают в две колонки — высоту колонки задаёт содержимое текстовой
-   * колонки (day-content), а не vh, поэтому скролла от разросшейся
-   * картинки больше не бывает в принципе.
+   * Картинка сцены остаётся сверху на всю ширину (см. .scene-img /
+   * #screen-day .scene-img) — двухколоночность экономит место только
+   * в блоке под ней: слева текст, справа варианты/показатели.
    */
-  .day-layout {
+  .day-lower {
     display: grid;
-    grid-template-columns: minmax(260px, 38%) 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    align-items: stretch;
+    align-items: start;
   }
 
-  .day-layout .scene-img {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: auto;
-    max-height: none;
-    margin-bottom: 0;
-  }
-
-  .day-content {
+  .outcome-side {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-  }
-
-  .day-content #day-body,
-  .day-content #outcome-body {
-    margin-bottom: 0;
   }
 }
