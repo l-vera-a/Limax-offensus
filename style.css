@@ -154,10 +154,14 @@ p {
 .scene-img {
   width: 100%;
   aspect-ratio: 16 / 9;
+  /* Картинка не должна диктовать высоту экрана — на невысоких окнах
+     (типичный ноутбук) кадрирование через object-fit: cover сохраняет
+     пропорции, оставляя место под текст и варианты без скролла. */
+  max-height: 34vh;
   object-fit: cover;
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-soft);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.85rem;
 }
 
 /* ==========================================================================
@@ -351,8 +355,20 @@ p {
    2. Миссия
    ========================================================================== */
 
+#screen-mission .screen-inner {
+  padding-top: 1.25rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+}
+
 #mission-sketch {
-  max-width: 220px;
+  max-width: 150px;
+  margin-bottom: 0.75rem;
+}
+
+#screen-mission .paper-panel,
+#screen-mission .disclaimer-sticker {
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 0.75rem;
 }
 
 .disclaimer-sticker {
@@ -375,6 +391,7 @@ p {
 #team-heading {
   /* Место под #mute-toggle (fixed, справа сверху), как у .stats-header/.journal-top. */
   padding-right: calc(var(--touch-min) + 0.5rem + env(safe-area-inset-right));
+  text-align: center;
 }
 
 .team-carousel {
@@ -574,10 +591,21 @@ p {
   white-space: nowrap;
 }
 
+#screen-day .screen-inner {
+  padding-top: 1rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+}
+
+#day-body,
+#outcome-body {
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.85rem;
+}
+
 #day-options {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .option-button {
@@ -850,9 +878,7 @@ p {
 }
 
 .journal-diagnosis {
-  margin: 0.75rem 0 0.5rem;
-  padding-top: 0.6rem;
-  border-top: 1px dashed rgba(46, 32, 22, 0.25);
+  margin-top: 0.6rem;
 }
 
 .journal-diagnosis-label {
@@ -873,6 +899,22 @@ p {
   margin-top: 0.75rem;
   padding-top: 0.6rem;
   border-top: 1px dashed rgba(46, 32, 22, 0.25);
+}
+
+.journal-theory {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid rgba(46, 32, 22, 0.25);
+}
+
+.journal-theory-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.6rem;
 }
 
 .journal-artifact-name {
@@ -898,6 +940,18 @@ p {
 
   .screen-inner {
     padding: 2.5rem 2rem 3rem;
+  }
+
+  #team-heading {
+    /* На этой ширине есть достаточный запас до #mute-toggle без
+       резервирования места под него — центр заголовка совпадает
+       с центром карусели под ним. */
+    padding-right: 0;
+  }
+
+  #screen-mission .screen-inner {
+    padding-top: 1.75rem;
+    padding-bottom: calc(1.75rem + env(safe-area-inset-bottom));
   }
 
   .carousel-arrow {

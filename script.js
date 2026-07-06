@@ -20,9 +20,12 @@
       muteLabel: "Выключить звук",
       unmuteLabel: "Включить звук",
       luckTagLabel: "Повезло",
+      luckBadTagLabel: "Не повезло",
+      luckMixedTagLabel: "Неожиданно",
       workedTag: "Сработало",
       failedTag: "Не сработало",
       ambiguousTag: "Неоднозначно",
+      neutralTag: "Без изменений",
       failedDayLabel: "День {n} — провал экспедиции",
       dayLabel: "День {n}",
       downloadCardFallback: "Скачать не удалось — попробуйте другой браузер.",
@@ -35,7 +38,8 @@
       statProdLabel: "Прогресс",
       dayOfTotal: "из {total}",
       artifactLabel: "Артефакт дня",
-      diagnosisLabel: "Разбор"
+      diagnosisLabel: "Разбор",
+      theoryDivider: "Теория дня"
     },
     uk: {
       continueButtonDay: "Продовжити експедицію (День {n} з {total})",
@@ -51,9 +55,12 @@
       muteLabel: "Вимкнути звук",
       unmuteLabel: "Увімкнути звук",
       luckTagLabel: "Пощастило",
+      luckBadTagLabel: "Не пощастило",
+      luckMixedTagLabel: "Неочікувано",
       workedTag: "Спрацювало",
       failedTag: "Не спрацювало",
       ambiguousTag: "Неоднозначно",
+      neutralTag: "Без змін",
       failedDayLabel: "День {n} — провал експедиції",
       dayLabel: "День {n}",
       downloadCardFallback: "Не вдалося завантажити — спробуйте інший браузер.",
@@ -66,7 +73,8 @@
       statProdLabel: "Прогрес",
       dayOfTotal: "з {total}",
       artifactLabel: "Артефакт дня",
-      diagnosisLabel: "Розбір"
+      diagnosisLabel: "Розбір",
+      theoryDivider: "Теорія дня"
     }
   };
 
@@ -486,7 +494,7 @@
     els.outcomeArtifactNote.textContent = t(day.artifactNote);
 
     els.luckNote.hidden = !outcome.luck;
-    if (outcome.luck) els.luckNote.textContent = "🍀 " + t(game.ui.luckTag);
+    if (outcome.luck) els.luckNote.textContent = "🍀 " + luckTagText(outcome.boevoyDukh, outcome.prodvizhenie);
 
     els.luckExplanation.hidden = !outcome.luck || !outcome.luckNote;
     if (outcome.luck && outcome.luckNote) els.luckExplanation.textContent = t(outcome.luckNote);
@@ -511,9 +519,16 @@
 
   function journalTagState(entry) {
     if (entry.luck) return "luck";
+    if (entry.boevoyDukh === 0 && entry.prodvizhenie === 0) return "neutral";
     if (entry.boevoyDukh >= 0 && entry.prodvizhenie >= 0) return "worked";
     if (entry.boevoyDukh <= 0 && entry.prodvizhenie <= 0) return "failed";
     return "ambiguous";
+  }
+
+  function luckTagText(boevoyDukh, prodvizhenie) {
+    if (boevoyDukh >= 0 && prodvizhenie >= 0) return tx("luckTagLabel");
+    if (boevoyDukh <= 0 && prodvizhenie <= 0) return tx("luckBadTagLabel");
+    return tx("luckMixedTagLabel");
   }
 
   function bindNextButton() {
@@ -600,10 +615,11 @@
 
       var tagState = journalTagState(entry);
       var tagContent = {
-        luck: { emoji: "🍀", text: tx("luckTagLabel") },
+        luck: { emoji: "🍀", text: luckTagText(entry.boevoyDukh, entry.prodvizhenie) },
         worked: { emoji: "✅", text: tx("workedTag") },
         failed: { emoji: "❌", text: tx("failedTag") },
-        ambiguous: { emoji: "➖", text: tx("ambiguousTag") }
+        ambiguous: { emoji: "➖", text: tx("ambiguousTag") },
+        neutral: { emoji: "🟰", text: tx("neutralTag") }
       }[tagState];
 
       item.innerHTML =
@@ -623,14 +639,17 @@
         '<span class="journal-tag"></span>' +
         '</div>' +
         '<p class="journal-luck-note" hidden></p>' +
+        '<div class="journal-artifact">' +
+        '<p class="journal-artifact-name"></p>' +
+        '<p class="journal-artifact-note"></p>' +
+        '</div>' +
+        '<div class="journal-theory">' +
+        '<p class="journal-theory-label"></p>' +
+        '<p class="journal-principle handwritten"></p>' +
         '<div class="journal-diagnosis">' +
         '<p class="journal-diagnosis-label"></p>' +
         '<p class="journal-diagnosis-text"></p>' +
         '</div>' +
-        '<p class="journal-principle handwritten"></p>' +
-        '<div class="journal-artifact">' +
-        '<p class="journal-artifact-name"></p>' +
-        '<p class="journal-artifact-note"></p>' +
         '</div>';
 
       item.querySelector(".journal-day").textContent = dayLabel;
@@ -642,6 +661,7 @@
       item.querySelector(".journal-outcome").textContent = t(entry.outcomeText);
       item.querySelector(".journal-diagnosis-label").textContent = tx("diagnosisLabel");
       item.querySelector(".journal-diagnosis-text").textContent = t(entry.optionDiagnosis);
+      item.querySelector(".journal-theory-label").textContent = tx("theoryDivider");
 
       var tagEl = item.querySelector(".journal-deltas .journal-tag");
       tagEl.textContent = tagContent.emoji + " " + tagContent.text;
