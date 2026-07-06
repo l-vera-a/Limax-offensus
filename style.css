@@ -731,6 +731,7 @@ p {
 
 .outcome-artifact-note {
   font-size: 0.9rem;
+  font-style: italic;
   color: var(--color-ink-soft);
   margin-bottom: 0;
 }
